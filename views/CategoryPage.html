@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-commerce Store</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../public/css/styles.css">
+</head>
+<body>
+    <div class="container-fluid px-0">
+        <!-- Mobile Navigation -->
+        <div class="d-lg-none">
+            <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+                <div class="container-fluid">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarOffcanvas" aria-controls="navbarOffcanvas">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="offcanvas offcanvas-start" tabindex="-1" id="navbarOffcanvas" aria-labelledby="navbarOffcanvasLabel">
+                        <div class="offcanvas-header">
+                            <h5 class="offcanvas-title" id="navbarOffcanvasLabel">Menu</h5>
+                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body">
+                            <ul class="navbar-nav mb-2 mb-lg-0">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Women</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Men</a>
+                                </li>
+                            </ul>
+                            <hr>
+                            <div class="d-flex flex-column gap-2">
+                                <a href="#" class="text-decoration-none text-dark">Sign in</a>
+                                <a href="#" class="text-decoration-none text-dark">Create account</a>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline-dark ms-auto me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#filterOffcanvas" aria-controls="filterOffcanvas">
+                        <span class="filter-btn">
+                            <span>Filters</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                            </svg>
+                        </span>
+                    </button>
+                </div>
+            </nav>
+
+            <!-- Mobile Filters Offcanvas -->
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="filterOffcanvas" aria-labelledby="filterOffcanvasLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="filterOffcanvasLabel">Filters</h5>
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <form>
+                        <div class="filter-section">
+                            <h6 class="category-heading">Color</h6>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" value="white" id="colorWhiteMobile">
+                                <label class="form-check-label" for="colorWhiteMobile">White</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" value="beige" id="colorBeigeMobile">
+                                <label class="form-check-label" for="colorBeigeMobile">Beige</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" value="blue" id="colorBlueMobile">
+                                <label class="form-check-label" for="colorBlueMobile">Blue</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" value="brown" id="colorBrownMobile">
+                                <label class="form-check-label" for="colorBrownMobile">Brown</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" value="green" id="colorGreenMobile">
+                                <label class="form-check-label" for="colorGreenMobile">Green</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" value="purple" id="colorPurpleMobile">
+                                <label class="form-check-label" for="colorPurpleMobile">Purple</label>
+                            </div>
+                        </div>
+                        <div class="filter-section">
+                            <h6 class="category-heading">Category</h6>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" value="all-new" id="categoryAllNewMobile">
+                                <label class="form-check-label" for="categoryAllNewMobile">All New Arrivals</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" value="tees" id="categoryTeesMobile">
+                                <label class="form-check-label" for="categoryTeesMobile">Tees</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" value="crewnecks" id="categoryCrewnecksMobile">
+                                <label class="form-check-label" for="categoryCrewnecksMobile">Crewnecks</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" value="sweatshirts" id="categorySweatshirtsMobile">
+                                <label class="form-check-label" for="categorySweatshirtsMobile">Sweatshirts</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" value="pants" id="categoryPantsMobile">
+                                <label class="form-check-label" for="categoryPantsMobile">Pants & Shorts</label>
+                            </div>
+                        </div>
+                        <div class="filter-section">
+                            <h6 class="category-heading">Sizes</h6>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" value="xs" id="sizeXSMobile">
+                                <label class="form-check-label" for="sizeXSMobile">XS</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" value="s" id="sizeSMobile">
+                                <label class="form-check-label" for="sizeSMobile">S</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" value="m" id="sizeMMobile">
+                                <label class="form-check-label" for="sizeMMobile">M</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" value="l" id="sizeLMobile">
+                                <label class="form-check-label" for="sizeLMobile">L</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" value="xl" id="sizeXLMobile">
+                                <label class="form-check-label" for="sizeXLMobile">XL</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" value="2xl" id="size2XLMobile">
+                                <label class="form-check-label" for="size2XLMobile">2XL</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="container py-4">
+            <div class="row g-4">
+                <!-- Desktop Sidebar -->
+                <div class="col-lg-3 d-none d-lg-block">
+                    <div class="sidebar">
+                        <form>
+                            <div class="filter-section">
+                                <h6 class="category-heading">Color</h6>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" value="white" id="colorWhite">
+                                    <label class="form-check-label" for="colorWhite">White</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" value="beige" id="colorBeige">
+                                    <label class="form-check-label" for="colorBeige">Beige</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" value="blue" id="colorBlue">
+                                    <label class="form-check-label" for="colorBlue">Blue</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" value="brown" id="colorBrown">
+                                    <label class="form-check-label" for="colorBrown">Brown</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" value="green" id="colorGreen">
+                                    <label class="form-check-label" for="colorGreen">Green</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" value="purple" id="colorPurple">
+                                    <label class="form-check-label" for="colorPurple">Purple</label>
+                                </div>
+                            </div>
+                            <div class="filter-section">
+                                <h6 class="category-heading">Category</h6>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" value="all-new" id="categoryAllNew">
+                                    <label class="form-check-label" for="categoryAllNew">All New Arrivals</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" value="tees" id="categoryTees">
+                                    <label class="form-check-label" for="categoryTees">Tees</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" value="crewnecks" id="categoryCrewnecks">
+                                    <label class="form-check-label" for="categoryCrewnecks">Crewnecks</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" value="sweatshirts" id="categorySweatshirts">
+                                    <label class="form-check-label" for="categorySweatshirts">Sweatshirts</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" value="pants" id="categoryPants">
+                                    <label class="form-check-label" for="categoryPants">Pants & Shorts</label>
+                                </div>
+                            </div>
+                            <div class="filter-section">
+                                <h6 class="category-heading">Sizes</h6>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" value="xs" id="sizeXS">
+                                    <label class="form-check-label" for="sizeXS">XS</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" value="s" id="sizeS">
+                                    <label class="form-check-label" for="sizeS">S</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" value="m" id="sizeM">
+                                    <label class="form-check-label" for="sizeM">M</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" value="l" id="sizeL">
+                                    <label class="form-check-label" for="sizeL">L</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" value="xl" id="sizeXL">
+                                    <label class="form-check-label" for="sizeXL">XL</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" value="2xl" id="size2XL">
+                                    <label class="form-check-label" for="size2XL">2XL</label>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Product Grid -->
+                <div class="col-lg-9">
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+                        <!-- Product 1 -->
+                        <div class="col">
+                            <div class="card h-100 product-card border-0">
+                                <img src="https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-02-image-card-02.jpg" class="card-img-top product-img" alt="Basic Tee 8-Pack">
+                                <div class="card-body p-3">
+                                    <h5 class="product-title">Basic Tee 8-Pack</h5>
+                                    <p class="card-text text-muted">Get the full lineup of our Basic Tees. Have a fresh shirt all week, and an extra for laundry day.</p>
+                                    <p class="product-color mb-1">8 colors</p>
+                                    <p class="price">$256</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Product 2 -->
+                        <div class="col">
+                            <div class="card h-100 product-card border-0">
+                                <img src="https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-02-image-card-02.jpg" class="card-img-top product-img" alt="Basic Tee">
+                                <div class="card-body p-3">
+                                    <h5 class="product-title">Basic Tee</h5>
+                                    <p class="card-text text-muted">Look like a visionary CEO and wear the same black t-shirt every day.</p>
+                                    <p class="product-color mb-1">Black</p>
+                                    <p class="price">$32</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Product 3 -->
+                        <div class="col">
+                            <div class="card h-100 product-card border-0">
+                                <img src="https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-02-image-card-02.jpg" class="card-img-top product-img" alt="Kinda White Basic Tee">
+                                <div class="card-body p-3">
+                                    <h5 class="product-title">Kinda White Basic Tee</h5>
+                                    <p class="card-text text-muted">It's probably, like, 5000 Kelvin instead of 6000 K.</p>
+                                    <p class="product-color mb-1">White</p>
+                                    <p class="price">$32</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Product 4 -->
+                        <div class="col">
+                            <div class="card h-100 product-card border-0">
+                                <img src="https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-02-image-card-02.jpg" class="card-img-top product-img" alt="Stone Basic Tee">
+                                <div class="card-body p-3">
+                                    <h5 class="product-title">Stone Basic Tee</h5>
+                                    <p class="card-text text-muted">White tees stain easily, and black tees fade. This is going to be gray for a while.</p>
+                                    <p class="product-color mb-1">Charcoal</p>
+                                    <p class="price">$32</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Product 5 -->
+                        <div class="col">
+                            <div class="card h-100 product-card border-0">
+                                <img src="https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-02-image-card-02.jpg" class="card-img-top product-img" alt="Fall Basic Tee 3-Pack">
+                                <div class="card-body p-3">
+                                    <h5 class="product-title">Fall Basic Tee 3-Pack</h5>
+                                    <p class="card-text text-muted">Who need stark minimalism when you could have earth tones? Embrace the season.</p>
+                                    <p class="product-color mb-1">Charcoal</p>
+                                    <p class="price">$96</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Product 6 -->
+                        <div class="col">
+                            <div class="card h-100 product-card border-0">
+                                <img src="https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-02-image-card-02.jpg" class="card-img-top product-img" alt="Linework Artwork Tee 3-Pack">
+                                <div class="card-body p-3">
+                                    <h5 class="product-title">Linework Artwork Tee 3-Pack</h5>
+                                    <p class="card-text text-muted">Get all 3 colors of our popular Linework design and some variety to your monotonous life.</p>
+                                    <p class="product-color mb-1">3 colors</p>
+                                    <p class="price">$108</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

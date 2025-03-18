@@ -49,7 +49,121 @@ footer {
     cursor: pointer;
 }
 
+.product-image {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+}
+.cart-item {
+    border-bottom: 1px solid #eee;
+    padding: 20px 0;
+}
+.cart-item:last-child {
+    border-bottom: none;
+}
+.navbar-brand img {
+    max-height: 30px;
+}
+.quantity-select {
+    width: 80px;
+}
+.remove-btn {
+    background: none;
+    border: none;
+    color: #6c757d;
+}
+.status-icon {
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.status-icon.in-stock {
+    color: #10b981;
+}
+.status-icon.shipping {
+    color: #6b7280;
+}
+.order-summary {
+    background-color: #f9fafb;
+    border-radius: 8px;
+    padding: 24px;
+}
+.checkout-btn {
+    background-color: #4f46e5;
+    border-color: #4f46e5;
+}
+.info-icon {
+    color: #6b7280;
+    font-size: 14px;
+    cursor: pointer;
+}
 
+.product-card {
+    height: 100%;
+    transition: transform 0.3s;
+}
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+.product-img {
+    aspect-ratio: 3/4;
+    object-fit: cover;
+}
+.product-img:hover {
+    opacity: 0.8;
+}
+.product-title {
+    font-weight: 500;
+    margin-top: 10px;
+}
+.product-color {
+    font-style: italic;
+    color: #6c757d;
+}
+.price {
+    font-weight: 500;
+    margin-top: 10px;
+}
+.filter-section {
+    border-bottom: 1px solid #dee2e6;
+    padding: 20px 0;
+}
+.filter-section:last-child {
+    border-bottom: none;
+}
+.form-check-input:checked {
+    background-color: #5c6ac4;
+    border-color: #5c6ac4;
+}
+.offcanvas {
+    max-width: 300px;
+}
+.category-heading {
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+.navbar-toggler {
+    border: none;
+}
+.navbar-toggler:focus {
+    box-shadow: none;
+}
+.filter-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+@media (min-width: 992px) {
+    .sidebar {
+        position: sticky;
+        top: 20px;
+        height: calc(100vh - 40px);
+        overflow-y: auto;
+    }
+}
 
 @media (max-width: 991.98px) {
     .btn-shop {
