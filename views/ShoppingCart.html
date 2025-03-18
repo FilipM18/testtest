@@ -1,79 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopping Cart</title>
+    <title>Dressify</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../public/css/styles.css">
 </head>
+
 <body>
+    <!-- Header -->
     <header>
         <nav class="navbar navbar-expand-md navbar-light bg-light border-bottom">
             <div class="container-fluid d-flex m-0 me-2">
-                <!-- Left: Hamburger -->
-                <div class="d-flex align-items-center">
-                    <button class="navbar-toggler me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-        
-                    <!-- Logo -->
-                    <a class="navbar-brand" href="#">
-                        <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="" height="40">
-                    </a>
+                <!-- Left: Hamburger on md- -->
+                <button class="navbar-toggler d-md-none me-2" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#navbarOffcanvas" aria-controls="navbarOffcanvas">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+    
+                <!-- Logo centered on md-, left on md+) -->
+                <a class="navbar-brand mx-auto mx-md-0" href="#">
+                    <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="" height="40">
+                </a>
+    
+                <!-- Center: Navbar links, only on md+ -->
+                <div class="collapse navbar-collapse d-none d-md-flex justify-content-center">
+                    <ul class="navbar-nav gap-3">
+                        <li class="nav-item"><a class="nav-link" href="#">Women</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Men</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Kids</a></li>
+                    </ul>
                 </div>
-        
-                <!-- Center: Navbar links -->
-                <ul class="navbar-nav d-none d-md-flex gap-3 ">
-                    <li class="nav-item"><a class="nav-link" href="#">Women</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Men</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">kids</a></li>
-                </ul>
-        
+    
                 <!-- Right: Icons -->
-                <div class="d-flex align-items-center ms-auto">
+                <div class="d-flex align-items-center">
                     <a href="#" class="text-muted me-3"><i class="bi bi-search fs-5"></i></a>
                     <a href="#" class="text-muted me-3"><i class="bi bi-person fs-5"></i></a>
-        
+    
                     <!-- Divider -->
                     <span class="mx-2" style="height: 1.5rem; width: 1px; background-color: #e0e0e0;"></span>
-        
+    
                     <a href="#" class="text-muted d-flex align-items-center">
                         <i class="bi bi-bag"></i>
-                                <span class="top-50 start-100 translate-middle badge rounded-pill bg-light text-dark">
-                                    3
-                                </span>
+                        <span class="top-50 start-100 translate-middle badge rounded-pill bg-light text-dark">
+                            3
+                        </span>
                     </a>
                 </div>
-        
-                <!-- Dropdown menu -->
-                <div class="d-md-none">
-                    <div class="collapse navbar-collapse position-absolute bg-light p-3 rounded shadow-sm"
-                        id="navbarNav" style="width: 250px; top: 100%; left: 0; z-index: 1000;">
-                        <ul class="navbar-nav">
-                            <li class="nav-item"><a class="nav-link" href="#">Women</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#">Men</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#">Kids</a></li>
-                        </ul>
-                    </div>
+            </div>
+        </nav>
+    
+        <!-- Offcanvas Menu only on md- -->
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="navbarOffcanvas" aria-labelledby="navbarOffcanvasLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="navbarOffcanvasLabel">Menu</h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="#">Women</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Men</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Kids</a></li>
+                </ul>
+                <hr>
+                <div class="d-flex flex-column gap-2">
+                    <a href="#" class="text-decoration-none text-dark">Sign in</a>
+                    <a href="#" class="text-decoration-none text-dark">Create account</a>
                 </div>
             </div>
-          </nav>
+        </div>
     </header>
 
     <main class="container py-5">
         <h1 class="mb-4 fw-bold">Shopping Cart</h1>
         <hr class="mb-4">
-        
+
         <div class="row g-5">
             <!-- Cart Items -->
             <div class="col-lg-8">
                 <!-- Item 1 -->
                 <div class="cart-item row align-items-center">
                     <div class="col-md-2 col-4 mb-3 mb-md-0">
-                        <img src="https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-01-product-01.jpg" class="product-image" alt="Basic Tee Sienna">
+                        <img src="https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-01-product-01.jpg"
+                            class="product-image" alt="Basic Tee Sienna">
                     </div>
                     <div class="col-md-6 col-8 mb-3 mb-md-0">
                         <h5 class="mb-1">Basic Tee</h5>
@@ -97,11 +109,12 @@
                         <button class="remove-btn"><i class="bi bi-x"></i></button>
                     </div>
                 </div>
-                
+
                 <!-- Item 2 -->
                 <div class="cart-item row align-items-center">
                     <div class="col-md-2 col-4 mb-3 mb-md-0">
-                        <img src="https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-01-product-02.jpg" class="product-image" alt="Basic Tee Black">
+                        <img src="https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-01-product-02.jpg"
+                            class="product-image" alt="Basic Tee Black">
                     </div>
                     <div class="col-md-6 col-8 mb-3 mb-md-0">
                         <h5 class="mb-1">Basic Tee</h5>
@@ -125,11 +138,12 @@
                         <button class="remove-btn"><i class="bi bi-x"></i></button>
                     </div>
                 </div>
-                
+
                 <!-- Item 3 -->
                 <div class="cart-item row align-items-center">
                     <div class="col-md-2 col-4 mb-3 mb-md-0">
-                        <img src="https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-01-product-03.jpg" class="product-image" alt="Nomad Tumbler">
+                        <img src="https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-01-product-03.jpg"
+                            class="product-image" alt="Nomad Tumbler">
                     </div>
                     <div class="col-md-6 col-8 mb-3 mb-md-0">
                         <h5 class="mb-1">Nomad Tumbler</h5>
@@ -154,17 +168,17 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Order Summary -->
             <div class="col-lg-4">
                 <div class="order-summary">
                     <h4 class="mb-4">Order summary</h4>
-                    
+
                     <div class="d-flex justify-content-between mb-3">
                         <span>Subtotal</span>
                         <span class="fw-bold">$99.00</span>
                     </div>
-                    
+
                     <div class="d-flex justify-content-between mb-3">
                         <div>
                             <span>Shipping estimate</span>
@@ -172,7 +186,7 @@
                         </div>
                         <span class="fw-bold">$5.00</span>
                     </div>
-                    
+
                     <div class="d-flex justify-content-between mb-4">
                         <div>
                             <span>Tax estimate</span>
@@ -180,14 +194,14 @@
                         </div>
                         <span class="fw-bold">$8.32</span>
                     </div>
-                    
+
                     <hr>
-                    
+
                     <div class="d-flex justify-content-between mb-4">
                         <span>Order total</span>
                         <span class="fw-bold">$112.32</span>
                     </div>
-                    
+
                     <button class="btn checkout-btn text-white w-100 py-2">Checkout</button>
                 </div>
             </div>
