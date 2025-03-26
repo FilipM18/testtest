@@ -30,9 +30,9 @@ footer {
     margin-top: 30px;
 }
 
-.landing img {
-    max-width: 100%;  /* Limits width to 80% of its container */
-    height: auto;  /* Keeps aspect ratio */
+.obr {
+    max-height: auto; 
+    width: 85%; 
 }
 
 .text-center {
@@ -350,6 +350,10 @@ footer {
   @media (max-width: 767px) {
     .order-summary {
       margin-top: 2rem;
+    }
+
+    .homeBtn {
+      margin-bottom: 20px;
     }
   }
 
