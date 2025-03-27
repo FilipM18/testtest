@@ -10,7 +10,7 @@
 
             <!-- Logo centered on md-, left on md+) -->
             <a class="navbar-brand mx-auto mx-md-0" href="">
-                <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="" height="40">
+                <img src="../../public/images/Dressify.png" alt="" height="40">
             </a>
 
             <!-- Center: Navbar links, only on md+ -->
