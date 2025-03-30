@@ -105,118 +105,40 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
+                        <div>
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
                                         <th>Order ID</th>
-                                        <th>Customer</th>
+                                        <th>Customer ID</th>
                                         <th>Date</th>
                                         <th>Total</th>
                                         <th>Status</th>
-                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td>#12345</td>
-                                        <td>John Doe</td>
+                                        <td>#54321</td>
                                         <td>2024-03-15</td>
                                         <td>$256</td>
                                         <td>
                                             <span class="badge bg-warning text-dark">Processing</span>
                                         </td>
-                                        <td>
-                                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
-                                                data-bs-target="#orderDetailsModal">
-                                                <i class="bi bi-eye"></i>
-                                            </button>
-                                        </td>
                                     </tr>
                                     <tr>
                                         <td>#12346</td>
-                                        <td>Jane Smith</td>
+                                        <td>#32154</td>
                                         <td>2024-03-14</td>
                                         <td>$128</td>
                                         <td>
                                             <span class="badge bg-success">Delivered</span>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
-                                                data-bs-target="#orderDetailsModal">
-                                                <i class="bi bi-eye"></i>
-                                            </button>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Order Details Modal -->
-    <div class="modal fade" id="orderDetailsModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Order #12345 Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h6>Customer Information</h6>
-                            <p class="mb-1">John Doe</p>
-                            <p class="mb-1">john.doe@example.com</p>
-                            <p>123 Main St, Anytown, USA</p>
-                        </div>
-                        <div class="col-md-6 text-end">
-                            <h6>Order Status</h6>
-                            <select class="form-select">
-                                <option>Processing</option>
-                                <option>Shipped</option>
-                                <option>Delivered</option>
-                                <option>Cancelled</option>
-                            </select>
-                        </div>
-                    </div>
-                    <table class="table mt-3">
-                        <thead>
-                            <tr>
-                                <th>Product</th>
-                                <th>Quantity</th>
-                                <th>Price</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Basic Tee</td>
-                                <td>2</td>
-                                <td>$32</td>
-                                <td>$64</td>
-                            </tr>
-                            <tr>
-                                <td>Fall Basic Tee 3-Pack</td>
-                                <td>1</td>
-                                <td>$96</td>
-                                <td>$96</td>
-                            </tr>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="3" class="text-end"><strong>Total</strong></td>
-                                <td><strong>$256</strong></td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Update Order</button>
                 </div>
             </div>
         </div>
