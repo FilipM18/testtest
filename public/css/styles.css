@@ -436,7 +436,6 @@ footer {
   }
 }
 
-/* Fix for navbar on small screens */
 @media (max-width: 575px) {
   .navbar-brand img {
     max-height: 25px;
@@ -447,7 +446,6 @@ footer {
   }
 }
 
-/* Fix for sidebar and card layouts on tablet screens */
 @media (min-width: 768px) and (max-width: 991px) {
   .sidebar {
     width: 100%;
