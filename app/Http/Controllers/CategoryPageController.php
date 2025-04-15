@@ -6,9 +6,9 @@ use Illuminate\Http\Request;
 
 class CategoryPageController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = [
+        $baseProducts = [
             [
                 'image' => 'images/blueGant.png',
                 'title' => 'Basic Tee 8-Pack',
@@ -16,14 +16,62 @@ class CategoryPageController extends Controller
                 'colors' => 8,
                 'price' => 256
             ],
-            // Duplicate the same product 5 more times for a total of 6
         ];
         
-        // Ensure we have 6 products
-        while (count($products) < 6) {
-            $products[] = $products[0];
+        // Create more products for pagination demo
+        $allProducts = [];
+        for ($i = 0; $i < 20; $i++) {
+            $product = $baseProducts[0];
+            $product['title'] = 'Basic Tee ' . ($i + 1) . '-Pack';
+            $allProducts[] = $product;
         }
         
-        return view('CategoryPage', compact('products'));
+        // Pagination settings
+        $perPage = 6;
+        $currentPage = (int) $request->query('page', 1);
+        $totalProducts = count($allProducts);
+        $totalPages = ceil($totalProducts / $perPage);
+        
+        
+        if ($currentPage < 1) $currentPage = 1;
+        if ($currentPage > $totalPages) $currentPage = $totalPages;
+        
+        $offset = ($currentPage - 1) * $perPage;
+        $products = array_slice($allProducts, $offset, $perPage);
+        
+        $colorOptions = [
+            ['value' => 'white', 'label' => 'White', 'id' => 'colorWhite'],
+            ['value' => 'beige', 'label' => 'Beige', 'id' => 'colorBeige'],
+            ['value' => 'blue', 'label' => 'Blue', 'id' => 'colorBlue'],
+            ['value' => 'brown', 'label' => 'Brown', 'id' => 'colorBrown'],
+            ['value' => 'green', 'label' => 'Green', 'id' => 'colorGreen'],
+            ['value' => 'purple', 'label' => 'Purple', 'id' => 'colorPurple'],
+        ];
+
+        $categoryOptions = [
+            ['value' => 'all-new', 'label' => 'All New Arrivals', 'id' => 'categoryAllNew'],
+            ['value' => 'tees', 'label' => 'Tees', 'id' => 'categoryTees'],
+            ['value' => 'crewnecks', 'label' => 'Crewnecks', 'id' => 'categoryCrewnecks'],
+            ['value' => 'sweatshirts', 'label' => 'Sweatshirts', 'id' => 'categorySweatshirts'],
+            ['value' => 'pants', 'label' => 'Pants & Shorts', 'id' => 'categoryPants'],
+        ];
+
+        $sizeOptions = [
+            ['value' => 'xs', 'label' => 'XS', 'id' => 'sizeXS'],
+            ['value' => 's', 'label' => 'S', 'id' => 'sizeS'],
+            ['value' => 'm', 'label' => 'M', 'id' => 'sizeM'],
+            ['value' => 'l', 'label' => 'L', 'id' => 'sizeL'],
+            ['value' => 'xl', 'label' => 'XL', 'id' => 'sizeXL'],
+            ['value' => '2xl', 'label' => '2XL', 'id' => 'size2XL'],
+        ];
+
+        return view('CategoryPage', compact(
+            'products', 
+            'colorOptions', 
+            'categoryOptions', 
+            'sizeOptions',
+            'currentPage',
+            'totalPages'
+        ));
     }
 }
