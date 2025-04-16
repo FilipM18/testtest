@@ -15,7 +15,6 @@
     @include('partials/header')
 
     <!-- Main Content -->
-    <!-- Main Content -->
 <main>
     <div class="container-fluid px-0">
         <!-- Mobile Navigation -->

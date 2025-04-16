@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryPageController;
-
+use App\Http\Controllers\CartController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -48,4 +48,8 @@ Route::get('/SignIn', function () {
     return view('SignIn');
 });
 
-Route::get('/category', [CategoryPageController::class, 'index'])->name('category.index');
+Route::get('/ShoppingCart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart', [CartController::class, 'add'])->name('cart.add');
+Route::put('/cart', [CartController::class, 'update'])->name('cart.update');
+Route::delete('/cart/{id}', [CartController::class, 'remove'])->name('cart.remove');
+Route::get('/cart/populate', [CartController::class, 'populate'])->name('cart.populate');
