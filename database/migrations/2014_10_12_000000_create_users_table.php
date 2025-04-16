@@ -11,14 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
+        Schema::table('users', function (Blueprint $table) {
+            // Add email verification column
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            
+            // Add remember token for "remember me" functionality
             $table->rememberToken();
-            $table->timestamps();
+            
+            // Change address to nullable as we have separate addresses table
+            $table->text('address')->nullable()->change();
         });
     }
 
@@ -27,6 +28,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('email_verified_at');
+            $table->dropRememberToken();
+            // We don't revert the address change to avoid data loss
+        });
     }
 };

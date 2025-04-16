@@ -397,6 +397,33 @@ body {
     height: auto;
     object-fit: cover;
   }
+
+  .dropdown-menu {
+    min-width: 200px;
+    padding: 0.5rem 0;
+    margin-top: 0.5rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  }
+
+.dropdown-item-text {
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+  }
+
+.dropdown-item {
+    padding: 0.5rem 1rem;
+  }
+
+.dropdown-item:active, 
+.dropdown-item:focus {
+    background-color: #f8f9fa;
+    color: #212529;
+} 
+
+.dropdown-divider {
+    margin: 0.25rem 0;
+}
+
   
   @media (min-width: 768px) {
     .featurette-heading {

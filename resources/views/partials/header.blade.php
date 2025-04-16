@@ -1,4 +1,3 @@
-<!--pozn. blade ešte nie je implmentovaný, partials sú zatiaľ iba pripravené na 2. fázu: backend-laravel-->
 <header>
     <nav class="navbar navbar-expand-md navbar-light bg-light border-bottom">
         <div class="container-fluid d-flex m-0 me-2">
@@ -25,7 +24,45 @@
             <!-- Right: Icons -->
             <div class="d-flex align-items-center">
                 <a href="#" class="text-muted me-3"><i class="bi bi-search fs-5"></i></a>
-                <a href="{{ url('../SignIn') }}" class="text-muted me-3"><i class="bi bi-person fs-5"></i></a>
+                
+                <!-- User dropdown menu -->
+                <div class="dropdown">
+                    <a href="#" class="text-muted me-3 dropdown-toggle" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person fs-5"></i>
+                    </a>
+                    
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        @guest
+                            <!-- Not logged in - show login/register options -->
+                            <li><a class="dropdown-item" href="{{ route('login') }}">Sign In</a></li>
+                            <li><a class="dropdown-item" href="{{ route('register') }}">Sign Up</a></li>
+                        @else
+                            <!-- Logged in - show user info and logout -->
+                            <li>
+                                <span class="dropdown-item-text">Hello, {{ Auth::user()->name }}</span>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            
+                            @if(Auth::user()->role === 'admin')
+                                <!-- Admin-specific options -->
+                                <li><a class="dropdown-item" href="/AdminOrderManagment">Order Management</a></li>
+                                <li><a class="dropdown-item" href="/AdminProductManagment">Product Management</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                            @endif
+                            
+                            <!-- Logout option -->
+                            <li>
+                                <form method="POST" action="{{ route('logout') }}" id="logout-form">
+                                    @csrf
+                                    <a class="dropdown-item" href="#" 
+                                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        Logout
+                                    </a>
+                                </form>
+                            </li>
+                        @endguest
+                    </ul>
+                </div>
 
                 <!-- Divider -->
                 <span class="mx-2" style="height: 1.5rem; width: 1px; background-color: #e0e0e0;"></span>
@@ -54,8 +91,25 @@
             </ul>
             <hr>
             <div class="d-flex flex-column gap-2">
-                <a href="{{ url('../SignIn') }}" class="text-decoration-none text-dark">Sign in</a>
-                <a href="{{ url('../SignIn') }}" class="text-decoration-none text-dark">Create account</a>
+                @guest
+                    <a href="{{ route('login') }}" class="text-decoration-none text-dark">Sign in</a>
+                    <a href="{{ route('register') }}" class="text-decoration-none text-dark">Create account</a>
+                @else
+                    <span class="text-dark">Hello, {{ Auth::user()->name }}</span>
+                    
+                    @if(Auth::user()->role === 'admin')
+                        <a href="/AdminOrderManagment" class="text-decoration-none text-dark">Order Management</a>
+                        <a href="/AdminProductManagment" class="text-decoration-none text-dark">Product Management</a>
+                    @endif
+                    
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <a href="#" class="text-decoration-none text-dark" 
+                           onclick="event.preventDefault(); this.closest('form').submit();">
+                            Logout
+                        </a>
+                    </form>
+                @endguest
             </div>
         </div>
     </div>
