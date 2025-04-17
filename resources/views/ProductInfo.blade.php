@@ -50,11 +50,10 @@
                     <h2 class="visually-hidden">Reviews</h2>
                     <div class="d-flex align-items-center">
                         @php
-                            $avgRating = isset($product->average_rating) ? $product->average_rating : 0;
-                            $reviewCount = isset($product->review_count) ? $product->review_count : 0;
+                            $avgRating = $product->average_rating;
+                            $reviewCount = $product->reviews->count();
                             $fullStars = floor($avgRating);
                             $hasHalfStar = $avgRating - $fullStars >= 0.5;
-                            
                         @endphp
                         <p class="text-muted mb-0">{{ number_format($avgRating, 1) }}</p>
                         <div class="ms-2">
@@ -74,6 +73,7 @@
                         </div>
                     </div>
                 </div>
+                
                 
                 <p class="mt-3">{{ $product->description }}</p>
                 
@@ -149,32 +149,34 @@
 
                 <div class="mt-3" id="reviews">
                     <h6>Customer Reviews</h6>
-                        @if(isset($product->reviews) && count($product->reviews) > 0)
-                            @foreach($product->reviews as $review)
-                                <div class="border p-3 rounded {{ !$loop->first ? 'mt-2' : '' }}">
-                                    <p><strong>{{ $review->user->name }}</strong> - 
-                                        <span class="text-warning">
-                                            @for($i = 1; $i <= 5; $i++)
-                                                @if($i <= $review->rating)
-                                                    &#9733;
-                                                @else
-                                                    &#9734;
-                                                @endif
-                                            @endfor
-                                        </span>
-                                    </p>
-                                    <p>"{{ $review->comment }}"</p>
-                                </div>
-                            @endforeach
-                        @elseif(!isset($product->reviews) || count($product->reviews) == 0)
-                            <div class="alert alert-info">
-                                <p class="mb-0">This product doesn't have any reviews yet. Be the first to share your experience!</p>
+                    @if($product->reviews->count() > 0)
+                        @foreach($product->reviews as $review)
+                            <div class="border p-3 rounded {{ !$loop->first ? 'mt-2' : '' }}">
+                                <p><strong>{{ $review->user->name }}</strong> - 
+                                    <span class="text-warning">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            @if($i <= $review->rating)
+                                                &#9733;
+                                            @else
+                                                &#9734;
+                                            @endif
+                                        @endfor
+                                    </span>
+                                    <small class="text-muted ms-2">{{ $review->created_at->format('M d, Y') }}</small>
+                                </p>
+                                <p>"{{ $review->comment }}"</p>
                             </div>
-                        @endif
+                        @endforeach
+                    @else
+                        <div class="alert alert-info">
+                            <p class="mb-0">This product doesn't have any reviews yet. Be the first to share your experience!</p>
+                        </div>
+                    @endif
                     <div class="text-center mt-3">
-                        <button class="btn btn-outline-primary">Write a Review</button>
-                    </div>
+                        <a href="{{ route('reviews.create', ['product_id' => $product->product_id]) }}" class="btn btn-outline-primary">Write a Review</a>
+                    </div>                    
                 </div>
+
                 
             </div>
         </div>

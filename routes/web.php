@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -130,4 +131,7 @@ Route::get('/test-db', function () {
     }
 });
 
+// Review routes
+Route::get('/reviews/create/{product_id}', [ReviewController::class, 'create'])->name('reviews.create');
+Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 

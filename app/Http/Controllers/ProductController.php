@@ -11,24 +11,28 @@ class ProductController extends Controller
 {
     public function show($id)
     {
-        // Add debugging
-        Log::info('Product ID requested: ' . $id);
-        
-        // Find the product by its ID
-        $product = Product::findOrFail($id);
+        // Load the product with its brand, reviews, and the users who wrote those reviews
+        $product = Product::with(['brand', 'reviews.user', 'variants'])
+            ->where('product_id', $id)
+            ->first();
         
         if (!$product) {
-            Log::info('Product not found with ID: ' . $id);
-            abort(404, 'Product not found');
+            return redirect()->route('products.index')->with('error', 'Product not found');
         }
         
-        Log::info('Product found: ' . $product->name);
+        // Calculate average rating and review count
+        $avgRating = $product->reviews->avg('rating') ?: 0;
+        $reviewCount = $product->reviews->count();
         
-        // Get all variants for this product
-        $variants = ProductVariant::where('product_id', $product->product_id)->get();
+        // Add these calculated values to the product object
+        $product->average_rating = $avgRating;
+        $product->review_count = $reviewCount;
         
-        // Return the product info view with product and variants data
+        // Get variants if needed
+        $variants = ProductVariant::where('product_id', $id)->get();
+        
         return view('ProductInfo', compact('product', 'variants'));
     }
+
 
 }
