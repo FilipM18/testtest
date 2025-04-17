@@ -58,21 +58,23 @@
                     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
                         @foreach($products as $product)
                             <x-product-card 
-                                :image="$product['image']"
-                                :title="$product['title']"
-                                :description="$product['description']"
-                                :colors="$product['colors']"
-                                :price="$product['price']"
+                                :image="$product->image_url"
+                                :title="$product->name"
+                                :description="Str::limit($product->description, 100)"
+                                :colors="$product->variants->unique('color')->count()"
+                                :price="$product->price"
+                                :id="$product->product_id"
                             />
                         @endforeach
+
                     </div>
-                    <x-pagination 
-                        :current-page="$currentPage" 
-                        :total-pages="$totalPages" 
-                        :route="'category.index'" 
-                        :query-params="$queryParams ?? []" 
-                    />
+                    
+                    <!-- Use Laravel's built-in pagination -->
+                    <div class="d-flex justify-content-center mt-4">
+                        {{ $products->appends(request()->query())->links() }}
+                    </div>
                 </div>
+
             </div>
         </div>
     </div>

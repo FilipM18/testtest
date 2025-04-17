@@ -12,15 +12,17 @@ class ProductCard extends Component
     public $colors;
     public $price;
     public $url;
+    public $id; // Add this property
 
-    public function __construct($image, $title, $description, $colors, $price, $url = null)
+    public function __construct($image, $title, $description, $colors, $price, $id, $url = null)
     {
         $this->image = $image;
         $this->title = $title;
         $this->description = $description;
         $this->colors = $colors;
         $this->price = $price;
-        $this->url = $url ?? route('ProductInfo');
+        $this->id = $id; // Store the ID
+        $this->url = $url ?? route('ProductInfo.show', $id); // Use the products.show route with the ID
     }
 
     public function render()

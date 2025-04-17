@@ -9,7 +9,7 @@
 
             <!-- Logo centered on md-, left on md+) -->
             <a class="navbar-brand mx-auto mx-md-0" href=" {{ url('../Home') }}">
-                <img src="images/Dressify.png" alt="Dressify Logo" height="40">
+                <img src="{{asset('images/Dressify.png')}}" alt="Dressify Logo" height="40">
             </a>
 
             <!-- Center: Navbar links, only on md+ -->
@@ -45,8 +45,8 @@
                             
                             @if(Auth::user()->role === 'admin')
                                 <!-- Admin-specific options -->
-                                <li><a class="dropdown-item" href="/AdminOrderManagment">Order Management</a></li>
-                                <li><a class="dropdown-item" href="/AdminProductManagment">Product Management</a></li>
+                                <li><a class="dropdown-item" href="/AdminOrderManagement">Order Management</a></li>
+                                <li><a class="dropdown-item" href="/AdminProductManagement">Product Management</a></li>
                                 <li><hr class="dropdown-divider"></li>
                             @endif
                             
@@ -98,8 +98,8 @@
                     <span class="text-dark">Hello, {{ Auth::user()->name }}</span>
                     
                     @if(Auth::user()->role === 'admin')
-                        <a href="/AdminOrderManagment" class="text-decoration-none text-dark">Order Management</a>
-                        <a href="/AdminProductManagment" class="text-decoration-none text-dark">Product Management</a>
+                        <a href="/AdminOrderManagement" class="text-decoration-none text-dark">Order Management</a>
+                        <a href="/AdminProductManagement" class="text-decoration-none text-dark">Product Management</a>
                     @endif
                     
                     <form method="POST" action="{{ route('logout') }}">

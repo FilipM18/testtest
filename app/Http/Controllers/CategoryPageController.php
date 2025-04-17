@@ -2,43 +2,45 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class CategoryPageController extends Controller
 {
     public function index(Request $request)
     {
-        $baseProducts = [
-            [
-                'image' => 'images/blueGant.png',
-                'title' => 'Basic Tee 8-Pack',
-                'description' => 'Get the full lineup of our Basic Tees. Have a fresh shirt all week, and an extra for laundry day.',
-                'colors' => 8,
-                'price' => 256
-            ],
-        ];
+        // Get filter parameters
+        $category = $request->query('category');
+        $color = $request->query('color');
+        $size = $request->query('size');
         
-        // Create more products for pagination demo
-        $allProducts = [];
-        for ($i = 0; $i < 20; $i++) {
-            $product = $baseProducts[0];
-            $product['title'] = 'Basic Tee ' . ($i + 1) . '-Pack';
-            $allProducts[] = $product;
+        // Start with a base query
+        $query = Product::query()->where('active', true);
+        
+        // Apply category filter if provided
+        if ($category && $category !== 'all-new') {
+            $query->where('type', $category);
+        }
+        
+        // Apply color filter if provided (requires join with variants)
+        if ($color) {
+            $query->whereHas('variants', function($q) use ($color) {
+                $q->where('color', $color);
+            });
+        }
+        
+        // Apply size filter if provided (requires join with variants)
+        if ($size) {
+            $query->whereHas('variants', function($q) use ($size) {
+                $q->where('size', $size);
+            });
         }
         
         // Pagination settings
         $perPage = 6;
-        $currentPage = (int) $request->query('page', 1);
-        $totalProducts = count($allProducts);
-        $totalPages = ceil($totalProducts / $perPage);
+        $products = $query->paginate($perPage);
         
-        
-        if ($currentPage < 1) $currentPage = 1;
-        if ($currentPage > $totalPages) $currentPage = $totalPages;
-        
-        $offset = ($currentPage - 1) * $perPage;
-        $products = array_slice($allProducts, $offset, $perPage);
-        
+        // Get filter options from database or use static lists
         $colorOptions = [
             ['value' => 'white', 'label' => 'White', 'id' => 'colorWhite'],
             ['value' => 'beige', 'label' => 'Beige', 'id' => 'colorBeige'],
@@ -64,14 +66,16 @@ class CategoryPageController extends Controller
             ['value' => 'xl', 'label' => 'XL', 'id' => 'sizeXL'],
             ['value' => '2xl', 'label' => '2XL', 'id' => 'size2XL'],
         ];
-
+        
+        // Get current query parameters for pagination links
+        $queryParams = request()->query();
+        
         return view('CategoryPage', compact(
             'products', 
             'colorOptions', 
             'categoryOptions', 
             'sizeOptions',
-            'currentPage',
-            'totalPages'
+            'queryParams'
         ));
     }
 }

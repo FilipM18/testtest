@@ -2,9 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryPageController;
-use App\Http\Controllers\CartController;
+
 use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use App\Http\Controllers\CartController;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -81,16 +86,8 @@ Route::post('/reset-password', function (Illuminate\Http\Request $request) {
 
 // Product Routes
 Route::get('/CategoryPage', [CategoryPageController::class, 'index'])->name('category.index');
-Route::get('/ProductInfo', function () {
-    return view('ProductInfo');
-})->name('ProductInfo');
 
-// Cart Routes
-Route::get('/ShoppingCart', [CartController::class, 'index'])->name('cart.index');
-Route::post('/cart', [CartController::class, 'add'])->name('cart.add');
-Route::put('/cart', [CartController::class, 'update'])->name('cart.update');
-Route::delete('/cart/{id}', [CartController::class, 'remove'])->name('cart.remove');
-Route::get('/cart/populate', [CartController::class, 'populate'])->name('cart.populate');
+
 
 // Protected Routes (require authentication)
 Route::middleware('auth')->group(function () {
@@ -99,11 +96,38 @@ Route::middleware('auth')->group(function () {
     });
     
     // Admin Routes
-    Route::get('/AdminOrderManagment', function () {
-        return view('AdminOrderManagment');
+    Route::get('/AdminOrderManagement', function () {
+        return view('AdminOrderManagement');
     });
     
-    Route::get('/AdminProductManagment', function () {
-        return view('AdminProductManagment');
+    Route::get('/AdminProductManagement', function () {
+        return view('AdminProductManagement');
     });
 });
+
+// Product routes
+Route::get('/ProductInfo/{id}', [ProductController::class, 'show'])->name('ProductInfo.show');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/ShoppingCart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/ShoppingCart/add', [CartController::class, 'add'])->name('cart.add');
+    Route::put('/ShoppingCart/update', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/ShoppingCart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+    Route::get('/ShoppingCart/populate', [CartController::class, 'populate'])->name('cart.populate');
+});
+
+
+Route::get('/test-db', function () {
+    try {
+        $product = \App\Models\Product::find(901);
+        if ($product) {
+            return "Found product: " . $product->name;
+        } else {
+            return "Product not found";
+        }
+    } catch (\Exception $e) {
+        return "Error: " . $e->getMessage();
+    }
+});
+
+

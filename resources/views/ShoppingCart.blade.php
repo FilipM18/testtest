@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="css/app.css">
     <style>
         .status-icon.in-stock { color: #10b981; }
-        .status-icon.shipping { color: #f59e0b; }
+        .status-icon.out-of-stock { color: #ef4444; }
         .remove-btn {
             background: transparent;
             border: none;
@@ -38,6 +38,12 @@
             </div>
         @endif
 
+        @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <div class="row g-5">
             <!-- Cart Items -->
             <form action="{{ route('cart.update') }}" method="POST">
@@ -45,7 +51,76 @@
                 @method('PUT')
                 
                 <div class="row">
-                    <x-cart :items="$cartItems" />
+                    <div class="col-lg-8 mb-4 mb-lg-0">
+                        @if(count($cart->items) > 0)
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Product</th>
+                                            <th scope="col">Price</th>
+                                            <th scope="col">Quantity</th>
+                                            <th scope="col">Total</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($cart->items as $item)
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        @if($item->variant->product->image_url)
+                                                            <img src="{{ asset($item->variant->product->image_url) }}" class="product-image me-3" alt="{{ $item->variant->product->name }}">
+                                                        @else
+                                                            <div class="bg-light me-3" style="width: 80px; height: 80px;"></div>
+                                                        @endif
+                                                        <div>
+                                                            <span>{{ $item->variant->product->name }}</span>
+                                                            <small class="d-block text-muted">
+                                                                {{ $item->variant->size }} / {{ $item->variant->color }}
+                                                            </small>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>${{ number_format($item->variant->product->price, 2) }}</td>
+                                                <td>
+                                                    <input type="number" name="items[{{ $item->cart_item_id }}][quantity]" value="{{ $item->quantity }}" min="0" class="form-control" style="width: 80px;">
+                                                </td>
+                                                <td>${{ number_format($item->variant->product->price * $item->quantity, 2) }}</td>
+                                                <td>
+                                                    @if($item->variant->stock_quantity > 0)
+                                                        <span class="status-icon in-stock">
+                                                            <i class="bi bi-check-circle-fill"></i>
+                                                            In Stock
+                                                        </span>
+                                                    @else
+                                                        <span class="status-icon out-of-stock">
+                                                            <i class="bi bi-x-circle-fill"></i>
+                                                            Out of Stock
+                                                        </span>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <form action="{{ route('cart.remove', $item->cart_item_id) }}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="remove-btn">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @else
+                            <div class="alert alert-info">
+                                Your cart is empty. <a href="{{ url('/CategoryPage') }}">Continue shopping</a>
+                            </div>
+                        @endif
+                    </div>
                     
                     <div class="col-lg-4">
                         <div class="card">
@@ -54,8 +129,8 @@
                                 
                                 <div class="d-flex justify-content-between mb-2">
                                     <span>Subtotal</span>
-                                    <span>${{ number_format($cartItems->sum(function($item) { 
-                                        return $item['price'] * $item['quantity']; 
+                                    <span>${{ number_format($cart->items->sum(function($item) { 
+                                        return $item->variant->product->price * $item->quantity; 
                                     }), 2) }}</span>
                                 </div>
                                 
@@ -66,15 +141,15 @@
                                 
                                 <div class="d-flex justify-content-between mb-4">
                                     <span>Tax</span>
-                                    <span>${{ number_format($cartItems->sum(function($item) { 
-                                        return $item['price'] * $item['quantity'] * 0.1; 
+                                    <span>${{ number_format($cart->items->sum(function($item) { 
+                                        return $item->variant->product->price * $item->quantity * 0.1; 
                                     }), 2) }}</span>
                                 </div>
                                 
                                 <div class="d-flex justify-content-between fw-bold mb-4">
                                     <span>Total</span>
-                                    <span>${{ number_format($cartItems->sum(function($item) { 
-                                        return $item['price'] * $item['quantity'] * 1.1; 
+                                    <span>${{ number_format($cart->items->sum(function($item) { 
+                                        return $item->variant->product->price * $item->quantity * 1.1; 
                                     }), 2) }}</span>
                                 </div>
                                 
