@@ -11,6 +11,10 @@ class CartController extends Controller
 {
     public function index()
     {
+        $user = Auth::user();
+        $cart = Cart::where('user_id', $user->id)->first();
+        $cartItems = $cart ? CartItem::where('cart_id', $cart->cart_id)->get() : collect();
+        
         // Ak existuje, ziskaj ho
         $cart = Cart::where('user_id', Auth::id())->first();
         
@@ -25,43 +29,40 @@ class CartController extends Controller
         // Nacitaj polozky kosika
         $cart->load('items.variant.product');
         
-        return view('ShoppingCart', compact('cart'));
+        return view('ShoppingCart', compact('cart' , 'cartItems'));
     }
 
     public function add(Request $request)
     {
-        $validated = $request->validate([
-            'product_id' => 'required|integer',
-            'name' => 'required|string',
-            'price' => 'required|numeric',
-            'quantity' => 'required|integer|min:1',
-            'image' => 'nullable|string',
-            'status' => 'nullable|string'
-        ]);
-        
-        // Skoontroluj, ci uz polozka existuje v kosiku
-        $existingItem = CartItem::where('user_id', Auth::id())
-            ->where('product_id', $validated['product_id'])
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'You must be logged in to add to cart.');
+        }
+
+        // 1. Find or create the user's cart
+        $cart = Cart::firstOrCreate(['user_id' => $user->id]);
+
+        // 2. Check if this variant is already in the cart
+        $cartItem = CartItem::where('cart_id', $cart->cart_id)
+            ->where('variant_id', $request->variant_id)
+            ->where('user_id', $user->id)
             ->first();
-            
-        if ($existingItem) {
-            // Zmen mnozstvo existujucej polozky
-            $existingItem->quantity += $validated['quantity'];
-            $existingItem->save();
+
+        if ($cartItem) {
+            // Update quantity
+            $cartItem->quantity += $request->quantity;
+            $cartItem->save();
         } else {
-            // Vytvori novu polozku
+            // Insert new cart item
             CartItem::create([
-                'user_id' => Auth::id(),
-                'product_id' => $validated['product_id'],
-                'name' => $validated['name'],
-                'price' => $validated['price'],
-                'quantity' => $validated['quantity'],
-                'image' => $validated['image'] ?? null,
-                'status' => $validated['status'] ?? 'in-stock'
+                'cart_id'   => $cart->cart_id,
+                'variant_id'=> $request->variant_id,
+                'quantity'  => $request->quantity,
+                'user_id'   => $user->id,
             ]);
         }
-        
-        return redirect()->route('cart.index')->with('success', 'Item added to cart successfully!');
+
+        return redirect()->route('cart.index')->with('success', 'Product added to cart!');
     }
     
     public function update(Request $request)
@@ -69,7 +70,7 @@ class CartController extends Controller
         $items = $request->input('items', []);
         
         foreach ($items as $id => $item) {
-            $cartItem = CartItem::where('id', $id)
+            $cartItem = CartItem::where('cart_item_id', $id)
                 ->where('user_id', Auth::id())
                 ->first();
                 
@@ -88,7 +89,7 @@ class CartController extends Controller
     
     public function remove($id)
     {
-        $cartItem = CartItem::where('id', $id)
+        $cartItem = CartItem::where('cart_item_id', $id)
             ->where('user_id', Auth::id())
             ->first();
             
@@ -99,41 +100,5 @@ class CartController extends Controller
         
         return redirect()->route('cart.index')->with('error', 'Item not found!');
     }
-    
-    // Po testovaní treba vymazať
-    public function populate()
-    {
-        $sampleItems = [
-            [
-                'product_id' => 1,
-                'name' => 'Summer Dress',
-                'price' => 49.99,
-                'quantity' => 1,
-                'image' => 'images/products/dress1.jpg',
-                'status' => 'in-stock'
-            ],
-            [
-                'product_id' => 2,
-                'name' => 'Casual Jeans',
-                'price' => 39.99,
-                'quantity' => 1,
-                'image' => 'images/products/jeans1.jpg',
-                'status' => 'shipping'
-            ]
-        ];
-        
-        foreach ($sampleItems as $item) {
-            CartItem::create([
-                'user_id' => Auth::id(),
-                'product_id' => $item['product_id'],
-                'name' => $item['name'],
-                'price' => $item['price'],
-                'quantity' => $item['quantity'],
-                'image' => $item['image'],
-                'status' => $item['status']
-            ]);
-        }
-        
-        return redirect()->route('cart.index')->with('success', 'Sample items added to cart!');
-    }
+
 }

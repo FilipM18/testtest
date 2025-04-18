@@ -16,7 +16,8 @@ class CartItem extends Model
     protected $fillable = [
         'cart_id',
         'variant_id',
-        'quantity'
+        'quantity',
+        'user_id'
     ];
     
     // Relationships

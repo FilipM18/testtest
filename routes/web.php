@@ -114,7 +114,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/ShoppingCart/add', [CartController::class, 'add'])->name('cart.add');
     Route::put('/ShoppingCart/update', [CartController::class, 'update'])->name('cart.update');
     Route::delete('/ShoppingCart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
-    Route::get('/ShoppingCart/populate', [CartController::class, 'populate'])->name('cart.populate');
 });
 
 
@@ -137,3 +136,6 @@ Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store
 
 
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+Route::delete('/cart/remove/{cartItemId}', [CartController::class, 'removeItem']);

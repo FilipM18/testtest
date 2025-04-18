@@ -97,11 +97,8 @@
 
                 <form action="{{ route('cart.add') }}" method="POST" class="mt-3">
                     @csrf
-                    
                     @if(isset($variants) && count($variants) > 0)
-                        <!-- Use variant data from database -->
                         <input type="hidden" name="product_id" value="{{ $product->product_id }}">
-                        
                         <div class="mb-3">
                             <h6>Size/Color</h6>
                             <select name="variant_id" id="variant_id" class="form-select" required>
@@ -114,38 +111,25 @@
                                 @endforeach
                             </select>
                         </div>
-                        @else
+                    @else
                         <!-- No variants available message -->
                         <div class="alert alert-warning mb-3">
                             <h6 class="alert-heading">No Variants Available</h6>
                             <p class="mb-0">This product is currently out of stock or has no available variants.</p>
                         </div>
-                        
-                        <div class="mb-3">
-                            <h6>Size</h6>
-                            <div class="d-flex gap-2">
-                                <input type="radio" class="btn-check" name="size-choice" id="size-s" disabled>
-                                <label class="btn btn-outline-secondary disabled" for="size-s">S</label>
-                                <input type="radio" class="btn-check" name="size-choice" id="size-m" disabled>
-                                <label class="btn btn-outline-secondary disabled" for="size-m">M</label>
-                                <input type="radio" class="btn-check" name="size-choice" id="size-l" disabled>
-                                <label class="btn btn-outline-secondary disabled" for="size-l">L</label>
-                                <input type="radio" class="btn-check" name="size-choice" id="size-xl" disabled>
-                                <label class="btn btn-outline-secondary disabled" for="size-xl">XL</label>
-                            </div>
-                        </div>
-                        
-                        <!-- Disable the Add to Cart button when no variants are available -->
                         <button type="button" class="btn btn-secondary w-100" disabled>Out of Stock</button>
-                    @endif                    
-                    
+                    @endif
+                
                     <div class="mb-3">
                         <label for="quantity" class="form-label">Quantity</label>
                         <input type="number" name="quantity" id="quantity" class="form-control" value="1" min="1">
                     </div>
-                    
-                    <button type="submit" class="btn btn-primary w-100">Add to cart</button>
+                
+                    @if(isset($variants) && count($variants) > 0)
+                        <button type="submit" class="btn btn-primary w-100">Add to cart</button>
+                    @endif
                 </form>
+                
 
                 <div class="mt-3" id="reviews">
                     <h6>Customer Reviews</h6>

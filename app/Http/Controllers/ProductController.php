@@ -6,6 +6,9 @@ use App\Models\Product;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Models\Cart;
+use App\Models\CartItem;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -33,5 +36,36 @@ class ProductController extends Controller
         return view('ProductInfo', compact('product', 'variants'));
     }
 
+    public function add(Request $request)
+{
+    $user = Auth::user();
+    if (!$user) {
+        return redirect()->route('login')->with('error', 'You must be logged in to add to cart.');
+    }
 
+    // Find or create the user's cart
+    $cart = Cart::firstOrCreate(['user_id' => $user->id]);
+
+    // Check if this product/variant is already in the cart
+    $cartItem = CartItem::where('cart_id', $cart->id)
+        ->where('product_id', $request->product_id)
+        ->where('variant_id', $request->variant_id)
+        ->first();
+
+    if ($cartItem) {
+        // Update quantity
+        $cartItem->quantity += $request->quantity;
+        $cartItem->save();
+    } else {
+        // Add new item
+        CartItem::create([
+            'cart_id' => $cart->id,
+            'product_id' => $request->product_id,
+            'variant_id' => $request->variant_id,
+            'quantity' => $request->quantity,
+        ]);
+    }
+
+    return redirect()->back()->with('success', 'Product added to cart!');
+}
 }

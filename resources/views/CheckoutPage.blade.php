@@ -90,7 +90,7 @@
               <div class="col-md-6 mb-3 mb-md-0">
                 <div class="delivery-option selected">
                   <div class="form-check">
-                    <input class="form-check-input" type="radio" name="delivery" id="standard" checked>
+                    <input class="form-check-input" type="radio" name="delivery" id="standard" data-shipping="5.00" checked>
                     <label class="form-check-label w-100" for="standard">
                       <div>Standard</div>
                       <div class="text-muted small">4-10 business days</div>
@@ -102,7 +102,7 @@
               <div class="col-md-6">
                 <div class="delivery-option">
                   <div class="form-check">
-                    <input class="form-check-input" type="radio" name="delivery" id="express">
+                    <input class="form-check-input" type="radio" name="delivery" id="express" data-shipping="16.00">
                     <label class="form-check-label w-100" for="express">
                       <div>Express</div>
                       <div class="text-muted small">2-5 business days</div>
@@ -155,8 +155,8 @@
         </div>
   
         <!-- Right column - Order Summary -->
-        <div class="col-lg-5 order-summary ">
-          <div class="mb-4">
+        <div class="col-lg-5 order-summary">
+          <div class="mb-4 position-sticky top-0">
             <h1 class="mb-3">Order summary</h1>
             <div class="summary-section">
               <!-- Products -->
@@ -181,7 +181,6 @@
                                     <div>${{ number_format($item->variant->product->price, 2) }}</div>
                                     <div class="mt-2 d-flex align-items-center">
                                         <input type="number" min="1" value="{{ $item->quantity }}" class="quantity-selector me-2" readonly>
-                                        <i class="fas fa-trash remove-item"></i>
                                     </div>
                                 </div>
                             </div>
@@ -245,6 +244,29 @@
   @include('partials/footer')
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+
+  function updateTotals(subtotal, taxes, total) {
+    document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+    document.getElementById('taxes').textContent = `$${taxes.toFixed(2)}`;
+    document.getElementById('total').textContent = `$${total.toFixed(2)}`;
+  }
+
+
+  document.querySelectorAll('input[name="delivery"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+      const shipping = parseFloat(this.getAttribute('data-shipping'));
+      const subtotal = parseFloat(document.getElementById('subtotal').textContent.replace('$',''));
+      const taxes = subtotal * 0.1;
+      const total = subtotal + taxes + shipping;
+
+      document.getElementById('shipping').textContent = `$${shipping.toFixed(2)}`;
+      document.getElementById('taxes').textContent = `$${taxes.toFixed(2)}`;
+      document.getElementById('total').textContent = `$${total.toFixed(2)}`;
+    });
+  });
+
+  </script>
 </body>
 
 </html>
