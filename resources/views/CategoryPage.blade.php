@@ -36,6 +36,24 @@
             </nav>
         </div>
 
+        <div class="row mb-3 align-items-center">
+            <div class="col-12 col-md-3">
+                <h4 class="mb-0">Products <small class="text-muted">({{ $products->total() }} items)</small></h4>
+            </div>
+            <div class="col-12 col-md-6 d-flex justify-content-md-start mt-2 mt-md-0 py-4">
+                <div class="dropdown">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Sort by: {{ request('sort', 'Default') }}
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="sortDropdown">
+                        <li><a class="dropdown-item {{ request('sort') == null ? 'active' : '' }}" href="{{ route('category.index', request()->except('sort', 'page')) }}">Default</a></li>
+                        <li><a class="dropdown-item {{ request('sort') == 'price_low' ? 'active' : '' }}" href="{{ route('category.index', array_merge(request()->except('sort', 'page'), ['sort' => 'price_low'])) }}">Price: Low to High</a></li>
+                        <li><a class="dropdown-item {{ request('sort') == 'price_high' ? 'active' : '' }}" href="{{ route('category.index', array_merge(request()->except('sort', 'page'), ['sort' => 'price_high'])) }}">Price: High to Low</a></li>
+                        <li><a class="dropdown-item {{ request('sort') == 'newest' ? 'active' : '' }}" href="{{ route('category.index', array_merge(request()->except('sort', 'page'), ['sort' => 'newest'])) }}">Newest</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
         <!-- Mobile Filters Offcanvas -->
         <x-mobile-filters 
             :color-options="$colorOptions" 

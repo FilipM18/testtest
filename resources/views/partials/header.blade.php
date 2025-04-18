@@ -23,7 +23,21 @@
 
             <!-- Right: Icons -->
             <div class="d-flex align-items-center">
-                <a href="#" class="text-muted me-3"><i class="bi bi-search fs-5"></i></a>
+            <div class="dropdown">
+                <a class="text-muted me-3" href="#" role="button" id="searchDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-search fs-5"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end p-3" style="width: 300px;" aria-labelledby="searchDropdown">
+                    <form action="{{ route('category.index') }}" method="GET">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="search" placeholder="Search products..." value="{{ request('search') }}">
+                            <button class="btn btn-outline-secondary" type="submit">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
                 
                 <!-- User dropdown menu -->
                 <div class="dropdown">

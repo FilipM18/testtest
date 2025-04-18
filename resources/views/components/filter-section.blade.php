@@ -2,14 +2,14 @@
     <h6 class="category-heading d-flex justify-content-between align-items-center" 
         data-bs-toggle="collapse" 
         data-bs-target="#collapse{{ str_replace(' ', '', $heading) }}" 
-        aria-expanded="true" 
+        aria-expanded="false" 
         aria-controls="collapse{{ str_replace(' ', '', $heading) }}"
         style="cursor: pointer;">
         {{ $heading }}
         <i class="bi bi-chevron-down"></i>
     </h6>
     
-    <div class="collapse hide" id="collapse{{ str_replace(' ', '', $heading) }}">
+    <div class="collapse" id="collapse{{ str_replace(' ', '', $heading) }}">
         @if($heading == 'Price')
             <div class="price-range mb-3">
                 <div class="d-flex justify-content-between mb-2">

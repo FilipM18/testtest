@@ -17,6 +17,8 @@ class CategoryPageController extends Controller
         $sizes = $request->input('sizes', []);
         $priceMin = $request->input('price_min');
         $priceMax = $request->input('price_max');
+        $sort = $request->input('sort');
+        $search = $request->input('search');
         
         if (!is_array($categories)) $categories = [$categories];
         if (!is_array($colors)) $colors = [$colors];
@@ -28,6 +30,14 @@ class CategoryPageController extends Controller
         
         $query = Product::query()->where('active', true);
         
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'ILIKE', "%{$search}%")
+                  ->orWhere('description', 'ILIKE', "%{$search}%")
+                  ->orWhere('type', 'ILIKE', "%{$search}%");
+            });
+        }        
+
         // Category filter
         if (!empty($categories)) {
             if (!in_array('all', $categories)) {
@@ -58,6 +68,22 @@ class CategoryPageController extends Controller
             $query->where('price', '<=', $priceMax);
         }
         
+        switch ($sort) {
+            case 'price_low':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price_high':
+                $query->orderBy('price', 'desc');
+                break;
+            case 'newest':
+                $query->orderBy('created_at', 'desc');
+                break;
+            default:
+                // Default sorting, you can define what this should be
+                $query->orderBy('name', 'asc');
+                break;
+        }
+
         $perPage = 6;
         $products = $query->paginate($perPage)->appends($request->query());
         
