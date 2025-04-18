@@ -3,79 +3,138 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\ProductVariant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CategoryPageController extends Controller
 {
     public function index(Request $request)
     {
         // Get filter parameters
-        $category = $request->query('category');
-        $color = $request->query('color');
-        $size = $request->query('size');
+        $categories = $request->input('category', []);
+        $colors = $request->input('color', []);
+        $sizes = $request->input('sizes', []);
+        $priceMin = $request->input('price_min');
+        $priceMax = $request->input('price_max');
         
-        // Start with a base query
+        if (!is_array($categories)) $categories = [$categories];
+        if (!is_array($colors)) $colors = [$colors];
+        if (!is_array($sizes)) $sizes = [$sizes];
+        
+        $categories = array_filter($categories);
+        $colors = array_filter($colors);
+        $sizes = array_filter($sizes);
+        
         $query = Product::query()->where('active', true);
         
-        // Apply category filter if provided
-        if ($category && $category !== 'all-new') {
-            $query->where('type', $category);
+        // Category filter
+        if (!empty($categories)) {
+            if (!in_array('all', $categories)) {
+                $query->whereIn('type', $categories);
+            }
         }
         
-        // Apply color filter if provided (requires join with variants)
-        if ($color) {
-            $query->whereHas('variants', function($q) use ($color) {
-                $q->where('color', $color);
+        // Color filter
+        if (!empty($colors)) {
+            $query->whereHas('variants', function($q) use ($colors) {
+                $q->whereIn('color', $colors);
             });
         }
         
-        // Apply size filter if provided (requires join with variants)
-        if ($size) {
-            $query->whereHas('variants', function($q) use ($size) {
-                $q->where('size', $size);
+        // Size filter
+        if (!empty($sizes)) {
+            $query->whereHas('variants', function($q) use ($sizes) {
+                $q->whereIn('size', $sizes);
             });
         }
         
-        // Pagination settings
+        // Price filter
+        if ($priceMin !== null && is_numeric($priceMin)) {
+            $query->where('price', '>=', $priceMin);
+        }
+        
+        if ($priceMax !== null && is_numeric($priceMax)) {
+            $query->where('price', '<=', $priceMax);
+        }
+        
         $perPage = 6;
-        $products = $query->paginate($perPage);
+        $products = $query->paginate($perPage)->withQueryString();
         
-        // Get filter options from database or use static lists
-        $colorOptions = [
-            ['value' => 'white', 'label' => 'White', 'id' => 'colorWhite'],
-            ['value' => 'beige', 'label' => 'Beige', 'id' => 'colorBeige'],
-            ['value' => 'blue', 'label' => 'Blue', 'id' => 'colorBlue'],
-            ['value' => 'brown', 'label' => 'Brown', 'id' => 'colorBrown'],
-            ['value' => 'green', 'label' => 'Green', 'id' => 'colorGreen'],
-            ['value' => 'purple', 'label' => 'Purple', 'id' => 'colorPurple'],
-        ];
-
-        $categoryOptions = [
-            ['value' => 'all-new', 'label' => 'All New Arrivals', 'id' => 'categoryAllNew'],
-            ['value' => 'tees', 'label' => 'Tees', 'id' => 'categoryTees'],
-            ['value' => 'crewnecks', 'label' => 'Crewnecks', 'id' => 'categoryCrewnecks'],
-            ['value' => 'sweatshirts', 'label' => 'Sweatshirts', 'id' => 'categorySweatshirts'],
-            ['value' => 'pants', 'label' => 'Pants & Shorts', 'id' => 'categoryPants'],
-        ];
-
-        $sizeOptions = [
-            ['value' => 'xs', 'label' => 'XS', 'id' => 'sizeXS'],
-            ['value' => 's', 'label' => 'S', 'id' => 'sizeS'],
-            ['value' => 'm', 'label' => 'M', 'id' => 'sizeM'],
-            ['value' => 'l', 'label' => 'L', 'id' => 'sizeL'],
-            ['value' => 'xl', 'label' => 'XL', 'id' => 'sizeXL'],
-            ['value' => '2xl', 'label' => '2XL', 'id' => 'size2XL'],
-        ];
+        // Color options
+        $colorOptions = ProductVariant::select('color')
+            ->distinct()
+            ->whereNotNull('color')
+            ->where('color', '!=', '')
+            ->orderBy('color')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'value' => $item->color,
+                    'label' => ucfirst($item->color),
+                    'id' => 'color' . ucfirst($item->color)
+                ];
+            })
+            ->toArray();
+            
+        // Category options
+        $categoryOptions = Product::select('type')
+            ->distinct()
+            ->whereNotNull('type')
+            ->where('type', '!=', '')
+            ->orderBy('type')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'value' => $item->type,
+                    'label' => ucfirst($item->type),
+                    'id' => 'category' . ucfirst($item->type)
+                ];
+            })
+            ->toArray();
         
-        // Get current query parameters for pagination links
-        $queryParams = request()->query();
+        array_unshift($categoryOptions, [
+            'value' => 'all',
+            'label' => 'All Products',
+            'id' => 'categoryAll'
+        ]);
+            
+        $sizeOptions = ProductVariant::select('size')
+            ->distinct()
+            ->whereNotNull('size')
+            ->where('size', '!=', '')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'value' => $item->size,
+                    'label' => strtoupper($item->size),
+                    'id' => 'size' . strtoupper($item->size)
+                ];
+            })
+            ->sortBy(function ($item) {
+                $sizeOrder = [
+                    's' => 1,
+                    'm' => 2,
+                    'l' => 3,
+                    'xl' => 4,
+                    '2xl' => 5,
+                ];
+                
+                return $sizeOrder[$item['value']] ?? 999; 
+            })
+            ->values() 
+            ->toArray();
         
+        $priceRange = Product::where('active', true)
+            ->selectRaw('MIN(price) as min_price, MAX(price) as max_price')
+            ->first();
+            
         return view('CategoryPage', compact(
             'products', 
             'colorOptions', 
             'categoryOptions', 
             'sizeOptions',
-            'queryParams'
+            'priceRange'
         ));
     }
 }

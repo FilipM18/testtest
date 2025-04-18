@@ -43,9 +43,8 @@
             :size-options="$sizeOptions" 
         />
 
-        <div class="container py-4">
+        <div class="container-fluid py-4">
             <div class="row g-4">
-                <!-- Desktop Sidebar -->
                 <div class="col-md-3 d-none d-md-block">
                     <x-sidebar 
                         :color-options="$colorOptions" 
@@ -53,7 +52,6 @@
                         :size-options="$sizeOptions" 
                     />
                 </div>
-                <!-- Product Grid -->
                 <div class="col-md-9">
                     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
                         @foreach($products as $product)
@@ -66,10 +64,17 @@
                                 :id="$product->product_id"
                             />
                         @endforeach
-
                     </div>
                     
-                    <!-- Use Laravel's built-in pagination -->
+                    @if($products->count() == 0)
+                    <div class="text-center py-5">
+                        <i class="bi bi-exclamation-circle fs-1 text-muted"></i>
+                        <h4 class="mt-3">No products found</h4>
+                        <p class="text-muted">Try adjusting your filters to find what you're looking for.</p>
+                        <a href="{{ route('category.index') }}" class="btn btn-outline-primary mt-2">Clear All Filters</a>
+                    </div>
+                    @endif
+                    
                     <div class="d-flex justify-content-center mt-4">
                         {{ $products->appends(request()->query())->links() }}
                     </div>

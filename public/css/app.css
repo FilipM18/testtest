@@ -424,7 +424,45 @@ body {
     margin: 0.25rem 0;
 }
 
+.category-heading {
+  font-weight: 500;
+  margin-bottom: 15px;
+  user-select: none;
+}
+
+.category-heading i {
+  font-size: 0.8rem;
+  transition: transform 0.3s ease;
+}
+
+.category-heading[aria-expanded="false"] i {
+  transform: rotate(-90deg);
+}
+
+.filter-section {
+  border-bottom: 1px solid #dee2e6;
+  padding: 20px 0;
+}
+
+.filter-section:last-child {
+  border-bottom: none;
+}
+
+.price-range input {
+  max-width: 100px;
+}
+
+
+.category-heading {
+  margin-bottom: 10px;
+}
+
   
+  @media (max-width: 767px) {
+    .filter-section {
+      padding: 15px 0;
+    }
+
   @media (min-width: 768px) {
     .featurette-heading {
       font-size: 3rem;
@@ -486,4 +524,5 @@ body {
       width: 50px;
       height: 50px;
     }
+  }
   }
