@@ -59,7 +59,7 @@ class CategoryPageController extends Controller
         }
         
         $perPage = 6;
-        $products = $query->paginate($perPage)->withQueryString();
+        $products = $query->paginate($perPage)->appends($request->query());
         
         // Color options
         $colorOptions = ProductVariant::select('color')

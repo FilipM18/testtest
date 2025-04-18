@@ -9,15 +9,12 @@ use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
-    /**
-     * Display the cart page with items.
-     */
     public function index()
-{
-    // Get the user's cart with its items
+    {
+        // Ak existuje, ziskaj ho
         $cart = Cart::where('user_id', Auth::id())->first();
         
-        // If no cart exists, create a new one
+        // Ak neexistuje, vytvor novy
         if (!$cart) {
             $cart = Cart::create([
                 'user_id' => Auth::id(),
@@ -25,17 +22,12 @@ class CartController extends Controller
             ]);
         }
         
-        // Eager load the cart items and their related data
+        // Nacitaj polozky kosika
         $cart->load('items.variant.product');
         
-        // Pass the cart to the view
         return view('ShoppingCart', compact('cart'));
     }
 
-    
-    /**
-     * Add an item to the cart.
-     */
     public function add(Request $request)
     {
         $validated = $request->validate([
@@ -47,17 +39,17 @@ class CartController extends Controller
             'status' => 'nullable|string'
         ]);
         
-        // Check if item already exists in cart
+        // Skoontroluj, ci uz polozka existuje v kosiku
         $existingItem = CartItem::where('user_id', Auth::id())
             ->where('product_id', $validated['product_id'])
             ->first();
             
         if ($existingItem) {
-            // Update quantity if item exists
+            // Zmen mnozstvo existujucej polozky
             $existingItem->quantity += $validated['quantity'];
             $existingItem->save();
         } else {
-            // Create new cart item
+            // Vytvori novu polozku
             CartItem::create([
                 'user_id' => Auth::id(),
                 'product_id' => $validated['product_id'],
@@ -72,9 +64,6 @@ class CartController extends Controller
         return redirect()->route('cart.index')->with('success', 'Item added to cart successfully!');
     }
     
-    /**
-     * Update cart items.
-     */
     public function update(Request $request)
     {
         $items = $request->input('items', []);
@@ -97,9 +86,6 @@ class CartController extends Controller
         return redirect()->route('cart.index')->with('success', 'Cart updated successfully!');
     }
     
-    /**
-     * Remove an item from the cart.
-     */
     public function remove($id)
     {
         $cartItem = CartItem::where('id', $id)
@@ -114,9 +100,7 @@ class CartController extends Controller
         return redirect()->route('cart.index')->with('error', 'Item not found!');
     }
     
-    /**
-     * Add sample items to cart (for testing).
-     */
+    // Po testovaní treba vymazať
     public function populate()
     {
         $sampleItems = [

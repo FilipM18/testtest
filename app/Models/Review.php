@@ -18,33 +18,25 @@ class Review extends Model
         'comment',
     ];
     
-    /**
-     * Get the user that wrote the review
-     */
+    // getter na používateľa ktor hodnotenie napísal
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
     
-    /**
-     * Get the product that this review belongs to
-     */
+    // getter na produkt, ktorý hodnotenie dostal
     public function product()
     {
         return $this->belongsTo(Product::class, 'product_id', 'product_id');
     }
     
-    /**
-     * Format the created_at date for display
-     */
+    // Upravenie formátu
     public function getFormattedDateAttribute()
     {
         return $this->created_at->format('M d, Y');
     }
     
-    /**
-     * Store a new review for a product
-     */
+    // Store hodnotenie pre produkt
     public function storeReviewForProduct($productId, $userId, $comment, $rating)
     {
         $this->product_id = $productId;
@@ -53,7 +45,7 @@ class Review extends Model
         $this->rating = $rating;
         $this->save();
         
-        // Recalculate the product's average rating
+        // Prepočítanie hodnotenia produktu
         $product = Product::find($productId);
         $product->recalculateRating();
         

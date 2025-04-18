@@ -11,8 +11,6 @@ class ProductVariant extends Model
     
     protected $table = 'productvariants';
     protected $primaryKey = 'variant_id';
-    
-    // No timestamps in this table
     public $timestamps = false;
     
     protected $fillable = [

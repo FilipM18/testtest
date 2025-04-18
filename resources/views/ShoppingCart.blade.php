@@ -154,7 +154,10 @@
                                 </div>
                                 
                                 <button type="submit" class="btn btn-primary w-100 mb-3">Update Cart</button>
-                                <a href="{{url('CheckoutPage')}}" class="btn btn-success w-100">Checkout</a>
+                                <form action="{{ route('checkout') }}" method="GET">
+                                    <button type="submit" class="btn btn-success">Checkout</button>
+                                </form>
+                                
                             </div>
                         </div>
                     </div>

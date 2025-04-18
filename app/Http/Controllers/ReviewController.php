@@ -9,18 +9,14 @@ use Illuminate\Support\Facades\Auth;
 
 class ReviewController extends Controller
 {
-    /**
-     * Show the form for creating a new review
-     */
+    // Na zobrazenie formulára pre pridanie review
     public function create($productId)
     {
         $product = Product::findOrFail($productId);
         return view('reviews.create', compact('product'));
     }
     
-    /**
-     * Store a newly created review
-     */
+    //Store na nový review
     public function store(Request $request)
     {
         $request->validate([

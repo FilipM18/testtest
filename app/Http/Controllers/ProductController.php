@@ -11,7 +11,7 @@ class ProductController extends Controller
 {
     public function show($id)
     {
-        // Load the product with its brand, reviews, and the users who wrote those reviews
+        //Načítanie produktu podľa ID 
         $product = Product::with(['brand', 'reviews.user', 'variants'])
             ->where('product_id', $id)
             ->first();
@@ -20,15 +20,14 @@ class ProductController extends Controller
             return redirect()->route('products.index')->with('error', 'Product not found');
         }
         
-        // Calculate average rating and review count
+        // Vypočítaj priemerné hodnotenie a počet recenzií
         $avgRating = $product->reviews->avg('rating') ?: 0;
         $reviewCount = $product->reviews->count();
         
-        // Add these calculated values to the product object
+        // Pridaj tieto hodnoty do objektu produktu
         $product->average_rating = $avgRating;
         $product->review_count = $reviewCount;
-        
-        // Get variants if needed
+
         $variants = ProductVariant::where('product_id', $id)->get();
         
         return view('ProductInfo', compact('product', 'variants'));

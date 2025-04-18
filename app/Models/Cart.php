@@ -12,7 +12,6 @@ class Cart extends Model
     protected $table = 'carts';
     protected $primaryKey = 'cart_id';
     
-    // Only created_at exists in the schema
     const UPDATED_AT = null;
     
     protected $fillable = [

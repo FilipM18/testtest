@@ -11,7 +11,7 @@ use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
-
+use App\Http\Controllers\CheckoutController; // Ensure this line is correct and the class exists
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -135,3 +135,5 @@ Route::get('/test-db', function () {
 Route::get('/reviews/create/{product_id}', [ReviewController::class, 'create'])->name('reviews.create');
 Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 
+
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');

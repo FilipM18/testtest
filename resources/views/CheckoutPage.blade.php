@@ -159,70 +159,75 @@
           <div class="mb-4">
             <h1 class="mb-3">Order summary</h1>
             <div class="summary-section">
-              <!-- Product 1 -->
-              <div class="product-card d-flex" id="product-1">
-                <div class="card-img-container me-3">
-                  <img src="images/blueGant.png" alt="Blue T-shirt">
-                </div>
-                <div class="flex-grow-1">
-                  <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                      <h5 class="mb-0">Basic Tee</h5>
-                      <div class="product-info">Blue</div>
-                      <div class="product-info">Large</div>
+              <!-- Products -->
+              @if(isset($cart) && count($cart->items) > 0)
+                @foreach($cart->items as $item)
+                    <div class="product-card d-flex mb-3" id="product-{{ $item->cart_item_id }}">
+                        <div class="card-img-container me-3">
+                            @if($item->variant->product->image_url)
+                                <img src="{{ asset($item->variant->product->image_url) }}" alt="{{ $item->variant->product->name }}">
+                            @else
+                                <div class="bg-light" style="width: 80px; height: 80px;"></div>
+                            @endif
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h5 class="mb-0">{{ $item->variant->product->name }}</h5>
+                                    <div class="product-info">{{ $item->variant->color }}</div>
+                                    <div class="product-info">{{ $item->variant->size }}</div>
+                                </div>
+                                <div class="text-end">
+                                    <div>${{ number_format($item->variant->product->price, 2) }}</div>
+                                    <div class="mt-2 d-flex align-items-center">
+                                        <input type="number" min="1" value="{{ $item->quantity }}" class="quantity-selector me-2" readonly>
+                                        <i class="fas fa-trash remove-item"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="text-end">
-                      <div>$32.00</div>
-                      <div class="mt-2 d-flex align-items-center">
-                        <input type="number" min="1" value="1" class="quantity-selector me-2">
-                        <i class="fas fa-trash remove-item"></i>
-                      </div>
-                    </div>
-                  </div>
+                @endforeach
+            @else
+                <div class="alert alert-info">
+                    Your cart is empty. <a href="{{ url('/CategoryPage') }}">Continue shopping</a>
                 </div>
-              </div>
-  
-              <!-- Product 2 -->
-              <div class="product-card d-flex" id="product-2">
-                <div class="card-img-container me-3">
-                  <img src="images/whiteGant.avif" alt="White T-shirt">
-                </div>
-                <div class="flex-grow-1">
-                  <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                      <h5 class="mb-0">Basic Tee</h5>
-                      <div class="product-info">White</div>
-                      <div class="product-info">Large</div>
-                    </div>
-                    <div class="text-end">
-                      <div>$32.00</div>
-                      <div class="mt-2 d-flex align-items-center">
-                        <input type="number" min="1" value="1" class="quantity-selector me-2">
-                        <i class="fas fa-trash remove-item"></i>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            @endif
+
   
               <!-- Order totals -->
               <div class="mt-3" id="order-totals">
-                <div class="summary-row">
-                  <span>Subtotal</span>
-                  <span id="subtotal">$64.00</span>
-                </div>
-                <div class="summary-row">
-                  <span>Shipping</span>
-                  <span id="shipping">$5.00</span>
-                </div>
-                <div class="summary-row">
-                  <span>Taxes</span>
-                  <span id="taxes">$6.52</span>
-                </div>
-                <div class="summary-row summary-total">
-                  <span>Total</span>
-                  <span id="total">$75.52</span>
-                </div>
+                <div class="mt-3" id="order-totals">
+                  <div class="summary-row">
+                      <span>Subtotal</span>
+                      <span id="subtotal">
+                          ${{ number_format($cart->items->sum(function($item) { 
+                              return $item->variant->product->price * $item->quantity; 
+                          }), 2) }}
+                      </span>
+                  </div>
+                  <div class="summary-row">
+                      <span>Shipping</span>
+                      <span id="shipping">$5.00</span>
+                  </div>
+                  <div class="summary-row">
+                      <span>Taxes</span>
+                      <span id="taxes">
+                          ${{ number_format($cart->items->sum(function($item) { 
+                              return $item->variant->product->price * $item->quantity * 0.1; 
+                          }), 2) }}
+                      </span>
+                  </div>
+                  <div class="summary-row summary-total">
+                      <span>Total</span>
+                      <span id="total">
+                          ${{ number_format($cart->items->sum(function($item) { 
+                              return $item->variant->product->price * $item->quantity * 1.1 + 5.00; 
+                          }), 2) }}
+                      </span>
+                  </div>
+              </div>
+              
               </div>
   
               <div class="mt-3">

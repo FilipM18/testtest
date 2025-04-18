@@ -12,7 +12,6 @@ class Brand extends Model
     protected $table = 'brands';
     protected $primaryKey = 'brand_id';
     
-    // No timestamps in this table based on the schema
     public $timestamps = false;
     
     protected $fillable = [
