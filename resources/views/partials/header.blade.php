@@ -84,7 +84,7 @@
                 <a href="{{ url('../ShoppingCart') }}" class="text-muted d-flex align-items-center">
                     <i class="bi bi-bag"></i>
                     <span class="top-50 start-100 translate-middle badge rounded-pill bg-light text-dark">
-                        3
+                    {{ $cartCount ?? 0 }}
                     </span>
                 </a>
             </div>

@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryPageController;
-
 use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Hash;
@@ -11,7 +10,8 @@ use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
-use App\Http\Controllers\CheckoutController; // Ensure this line is correct and the class exists
+use App\Http\Controllers\CheckoutController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -88,14 +88,8 @@ Route::post('/reset-password', function (Illuminate\Http\Request $request) {
 // Product Routes
 Route::get('/CategoryPage', [CategoryPageController::class, 'index'])->name('category.index');
 
-
-
 // Protected Routes (require authentication)
 Route::middleware('auth')->group(function () {
-    Route::get('/CheckoutPage', function () {
-        return view('CheckoutPage');
-    });
-    
     // Admin Routes
     Route::get('/AdminOrderManagement', function () {
         return view('AdminOrderManagement');
@@ -109,13 +103,15 @@ Route::middleware('auth')->group(function () {
 // Product routes
 Route::get('/ProductInfo/{id}', [ProductController::class, 'show'])->name('ProductInfo.show');
 
+// Cart routes
 Route::middleware(['auth'])->group(function () {
     Route::get('/ShoppingCart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/ShoppingCart/add', [CartController::class, 'add'])->name('cart.add');
     Route::put('/ShoppingCart/update', [CartController::class, 'update'])->name('cart.update');
     Route::delete('/ShoppingCart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+    Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add.alt');
+    Route::delete('/cart/remove/{cartItemId}', [CartController::class, 'removeItem'])->name('cart.remove.item');
 });
-
 
 Route::get('/test-db', function () {
     try {
@@ -134,8 +130,12 @@ Route::get('/test-db', function () {
 Route::get('/reviews/create/{product_id}', [ReviewController::class, 'create'])->name('reviews.create');
 Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 
+// Checkout process routes - 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/CheckoutPage', [CheckoutController::class, 'index'])->name('checkout.legacy');
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+    Route::post('/checkout/complete', [CheckoutController::class, 'completeOrder'])->name('checkout.complete');
+    Route::get('/order/confirmation/{order}', [CheckoutController::class, 'showConfirmation'])->name('order.confirmation');
+});
 
-Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
 
-Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
-Route::delete('/cart/remove/{cartItemId}', [CartController::class, 'removeItem']);
