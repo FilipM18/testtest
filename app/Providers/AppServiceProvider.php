@@ -9,28 +9,28 @@ use App\Models\Cart;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
-    public function register(): void
+    public function register()
     {
         //
     }
-
-    /**
-     * Bootstrap any application services.
-     */
+    
     public function boot()
     {
         View::composer('*', function ($view) {
             $cartCount = 0;
+            
             if (Auth::check()) {
+                // Authenticated user - get count from database
                 $cart = Cart::where('user_id', Auth::id())->first();
                 if ($cart) {
-                    // Sum the quantity of all items in the cart
                     $cartCount = $cart->items()->sum('quantity');
                 }
+            } else {
+                // Guest user - get count from session
+                $sessionCart = session()->get('cart', []);
+                $cartCount = array_sum($sessionCart);
             }
+            
             $view->with('cartCount', $cartCount);
         });
     }

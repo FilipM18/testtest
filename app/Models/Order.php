@@ -8,12 +8,12 @@ class Order extends Model
 {
     protected $primaryKey = 'order_id';
     
-    // Disable the timestamps feature completely
-    public $timestamps = false;
+    const UPDATED_AT = null;
     
-    // Or alternatively, keep created_at but disable updated_at:
-    // const UPDATED_AT = null;
-    
+    protected $dates = [
+        'created_at'
+    ];
+
     protected $fillable = [
         'user_id', 'total_amount', 'status', 'payment_method', 'payment_status'
     ];
@@ -26,5 +26,10 @@ class Order extends Model
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class, 'order_id', 'order_id');
+    }
+    
+    public function address()
+    {
+        return $this->belongsTo(Address::class, 'address_id', 'address_id');
     }
 }

@@ -36,11 +36,11 @@
             <h3 class="mb-3">Contact information</h3>
             <div class="mb-3">
               <label for="email" class="form-label">Email address</label>
-              <input type="email" class="form-control" id="email" name="email" required value="{{ old('email', auth()->user()->email ?? '') }}">
+              <input type="email" class="form-control" id="email" name="email" required value="{{ old('email') }}">
             </div>
             <div class="mb-3">
               <label for="phone" class="form-label">Phone</label>
-              <input type="text" class="form-control" id="phone" name="phone" required value="{{ old('phone', auth()->user()->phone ?? '') }}">
+              <input type="text" class="form-control" id="phone" name="phone" required value="{{ old('email') }}">
             </div>
           </div>
           

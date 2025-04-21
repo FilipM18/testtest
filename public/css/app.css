@@ -452,12 +452,136 @@ body {
   max-width: 100px;
 }
 
-
 .category-heading {
   margin-bottom: 10px;
 }
 
-  
+.bi-check-circle-fill {
+  color: #10b981;
+  filter: drop-shadow(0 4px 8px rgba(16, 185, 129, 0.2));
+}
+
+
+.confirmation-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.order-confirmation-card {
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border: none;
+  overflow: hidden;
+}
+
+.order-confirmation-card .card-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #eaecef;
+  padding: 1rem 1.5rem;
+}
+
+.order-confirmation-card .card-header h3 {
+  margin: 0;
+  color: #333;
+  font-weight: 600;
+}
+
+.order-item {
+  display: flex;
+  padding: 1rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.order-item:last-child {
+  border-bottom: none;
+}
+
+.order-item-image {
+  width: 80px;
+  height: 80px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-right: 1rem;
+}
+
+.order-item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.order-item-details {
+  flex-grow: 1;
+}
+
+
+.order-item-price {
+  font-weight: 500;
+  background-color: #f9fafb;
+  padding: 0.5rem;
+  border-radius: 4px;
+}
+
+.order-item-name {
+  margin-bottom: 0.25rem;
+}
+
+.order-item-variant {
+  color: #6c757d;
+  margin-bottom: 0.25rem;
+}
+
+.order-summary-section {
+  background-color: #f9fafb;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.summary-row:last-child {
+  margin-bottom: 0;
+}
+
+.summary-row.total {
+  font-weight: 600;
+  font-size: 1.1rem;
+  border-top: 1px solid #dee2e6;
+  padding-top: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.continue-shopping-btn {
+  background-color: #6a4eff;
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  margin-top: 2rem;
+}
+
+.continue-shopping-btn:hover {
+  background-color: #5a3fd7;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(106, 78, 255, 0.2);
+}
+
+.order-item-image {
+  margin-bottom: 1rem;
+  width: 30%;
+  height: 160px;
+}
+
+
   @media (max-width: 767px) {
     .filter-section {
       padding: 15px 0;
@@ -501,7 +625,7 @@ body {
     }
   }
   
-  /* Fix for navbar on small screens */
+  
   @media (max-width: 575px) {
     .navbar-brand img {
       max-height: 25px;
@@ -512,7 +636,7 @@ body {
     }
   }
   
-  /* Fix for sidebar and card layouts on tablet screens */
+  
   @media (min-width: 768px) and (max-width: 991px) {
     .sidebar {
       width: 100%;

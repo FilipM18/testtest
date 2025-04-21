@@ -104,14 +104,13 @@ Route::middleware('auth')->group(function () {
 Route::get('/ProductInfo/{id}', [ProductController::class, 'show'])->name('ProductInfo.show');
 
 // Cart routes
-Route::middleware(['auth'])->group(function () {
-    Route::get('/ShoppingCart', [CartController::class, 'index'])->name('cart.index');
-    Route::post('/ShoppingCart/add', [CartController::class, 'add'])->name('cart.add');
-    Route::put('/ShoppingCart/update', [CartController::class, 'update'])->name('cart.update');
-    Route::delete('/ShoppingCart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
-    Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add.alt');
-    Route::delete('/cart/remove/{cartItemId}', [CartController::class, 'removeItem'])->name('cart.remove.item');
-});
+Route::get('/ShoppingCart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/ShoppingCart/add', [CartController::class, 'add'])->name('cart.add');
+Route::put('/ShoppingCart/update', [CartController::class, 'update'])->name('cart.update');
+Route::delete('/ShoppingCart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add.alt');
+Route::delete('/cart/remove/{cartItemId}', [CartController::class, 'removeItem'])->name('cart.remove.item');
+
 
 Route::get('/test-db', function () {
     try {
@@ -131,11 +130,10 @@ Route::get('/reviews/create/{product_id}', [ReviewController::class, 'create'])-
 Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 
 // Checkout process routes - 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/CheckoutPage', [CheckoutController::class, 'index'])->name('checkout.legacy');
-    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
-    Route::post('/checkout/complete', [CheckoutController::class, 'completeOrder'])->name('checkout.complete');
-    Route::get('/order/confirmation/{order}', [CheckoutController::class, 'showConfirmation'])->name('order.confirmation');
-});
+Route::get('/CheckoutPage', [CheckoutController::class, 'index'])->name('checkout.legacy');
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+Route::post('/checkout/complete', [CheckoutController::class, 'completeOrder'])->name('checkout.complete');
+Route::get('/order/confirmation/{order}', [CheckoutController::class, 'showConfirmation'])->name('order.confirmation');
+
 
 
