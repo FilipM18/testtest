@@ -14,20 +14,18 @@
     <!-- Header -->
     @include('partials/header')
 
-    <!-- Main Content -->
-    
+    <!-- Main Content --> 
+    <main>
         <div class="container py-4">
             <div class="row">
                 <!-- Sidebar Navigation -->
                 <div class="col-md-3 mb-3">
                     <div class="list-group sidebar">
-                        <a href="AdminProductManagement.html" class="list-group-item list-group-item-action">Products</a>
-                        <a href="AdminOrderManagement.html" class="list-group-item list-group-item-action active">Orders</a>
+                        <a href="{{ url('AdminProductManagement') }}" class="list-group-item list-group-item-action">Products</a>
+                        <a href="{{ url('AdminOrderManagement') }}" class="list-group-item list-group-item-action active">Orders</a>
                     </div>
                 </div>
-    
-                <!-- Main Content -->
-            <main>
+        
                 <div class="col-md-9">
                     <div class="card mb-4">
                         <div class="card-header d-flex justify-content-between align-items-center">

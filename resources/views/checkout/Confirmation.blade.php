@@ -38,26 +38,25 @@
                         <div class="mb-4">
                             <h4>Order Items</h4>
                             @foreach($order->orderItems as $item)
-<div class="order-item">
-    <div class="order-item-image">
-        @if($item->variant->product->image_url)
-        <img src="{{ asset($item->variant->product->image_url) }}" alt="{{ $item->variant->product->name }}">
-        @else
-        <div class="bg-light" style="width: 100%; height: 100%;"></div>
-        @endif
-    </div>
-    <div class="order-item-details">
-        <h5 class="order-item-name">{{ $item->variant->product->name }}</h5>
-        <div class="order-item-variant">{{ $item->variant->color }} - {{ $item->variant->size }}</div>
-        <div>Quantity: {{ $item->quantity }}</div>
-    </div>
-    <div class="order-item-price">
-        <div>Price: ${{ number_format($item->price, 2) }}</div>
-        <div class="fw-bold">Total: ${{ number_format($item->price * $item->quantity, 2) }}</div>
-    </div>
-</div>
-@endforeach
-
+                                <div class="order-item">
+                                    <div class="order-item-image">
+                                        @if($item->variant->product->image_url)
+                                            <img src="{{ asset($item->variant->product->image_url) }}" alt="{{ $item->variant->product->name }}">
+                                        @else
+                                            <div class="bg-light" style="width: 100%; height: 100%;"></div>
+                                        @endif
+                                    </div>
+                                    <div class="order-item-details">
+                                        <h5 class="order-item-name">{{ $item->variant->product->name }}</h5>
+                                        <div class="order-item-variant">{{ $item->variant->color }} - {{ $item->variant->size }}</div>
+                                        <div>Quantity: {{ $item->quantity }}</div>
+                                    </div>
+                                    <div class="order-item-price">
+                                        <div>Price: ${{ number_format($item->price, 2) }}</div>
+                                        <div class="fw-bold">Total: ${{ number_format($item->price * $item->quantity, 2) }}</div>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
                         
                         <div class="order-summary-section">
@@ -65,6 +64,7 @@
                                 <span>Subtotal</span>
                                 <span>${{ number_format($order->orderItems->sum(function($item) { return $item->price * $item->quantity; }), 2) }}</span>
                             </div>
+                            
                             <div class="summary-row">
                                 <span>Shipping</span>
                                 <span>${{ number_format($order->total_amount - ($order->orderItems->sum(function($item) { return $item->price * $item->quantity; }) * 1.1), 2) }}</span>

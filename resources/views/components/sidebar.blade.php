@@ -1,4 +1,4 @@
-<div class="sidebar">
+<div class="sidebar position-sticky top-0 ms-2">
     <form action="{{ route('category.index') }}" method="GET" id="filter-form-desktop">
         <x-filter-section :heading="'Price'" :options="[]" />
         <x-filter-section :heading="'Category'" :options="$categoryOptions" />

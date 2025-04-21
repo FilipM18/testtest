@@ -13,12 +13,12 @@ class CartController extends Controller
     public function index()
     {
         if (Auth::check()) {
-            // Authenticated user - use database cart
+            // Autentifikacia 
             $cart = Cart::where('user_id', Auth::id())->first();
             $cartItems = $cart ? CartItem::where('cart_id', $cart->cart_id)->get() : collect();
             $cart->load('items.variant.product');
         } else {
-            // Guest user - use session cart
+            // Guest- session
             $sessionCart = session()->get('cart', []);
             $cartItems = collect();
             
@@ -32,8 +32,7 @@ class CartController extends Controller
                     ]);
                 }
             }
-            
-            // Create a cart object for the view
+
             $cart = (object)['items' => $cartItems];
         }
         
@@ -56,11 +55,9 @@ class CartController extends Controller
                 ->first();
                 
             if ($cartItem) {
-                // Update quantity
                 $cartItem->quantity += $quantity;
                 $cartItem->save();
             } else {
-                // Insert new cart item
                 CartItem::create([
                     'cart_id' => $cart->cart_id,
                     'variant_id' => $variantId,
@@ -72,7 +69,7 @@ class CartController extends Controller
             // Guest user - store in session
             $cart = session()->get('cart', []);
             
-            // If item exists, update quantity
+            // Ak existuje zmeň množstvo
             if (isset($cart[$variantId])) {
                 $cart[$variantId] += $quantity;
             } else {

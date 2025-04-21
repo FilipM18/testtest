@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     protected $primaryKey = 'order_id';
-    
-    const UPDATED_AT = null;
+    protected $table = 'orders';
+    public $timestamps = true;
     
     protected $dates = [
         'created_at'

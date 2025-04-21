@@ -1,29 +1,27 @@
 <nav aria-label="Product pagination" class="mt-5">
     <ul class="pagination justify-content-center">
-        {{-- Previous Page Link --}}
-        <li class="page-item {{ $currentPage <= 1 ? 'disabled' : '' }}">
-            <a class="page-link" href="{{ $isValidPage($currentPage - 1) ? $getPageUrl($currentPage - 1) : '#' }}" 
-               tabindex="{{ $currentPage <= 1 ? '-1' : '0' }}" 
-               aria-disabled="{{ $currentPage <= 1 ? 'true' : 'false' }}">
-                <span aria-hidden="true">&laquo;</span>
+
+        <li class="page-item {{ $paginator->currentPage() <= 1 ? 'disabled' : '' }}">
+            <a class="page-link border-0 bg-transparent" href="{{ $paginator->previousPageUrl() }}" 
+               tabindex="{{ $paginator->currentPage() <= 1 ? '-1' : '0' }}" 
+               aria-disabled="{{ $paginator->currentPage() <= 1 ? 'true' : 'false' }}">
+                <i class="bi bi-chevron-left fs-4"></i>
             </a>
         </li>
 
-        {{-- Page Number Links --}}
-        @foreach($getPageNumbers() as $page)
-            <li class="page-item {{ $page == $currentPage ? 'active' : '' }}" aria-current="{{ $page == $currentPage ? 'page' : '' }}">
-                <a class="page-link {{ $page != $currentPage ? 'text-dark' : '' }}" href="{{ $getPageUrl($page) }}">
+        @foreach(range(1, $paginator->lastPage()) as $page)
+            <li class="page-item {{ $page == $paginator->currentPage() ? 'active' : '' }}" aria-current="{{ $page == $paginator->currentPage() ? 'page' : '' }}">
+                <a class="page-link mx-1 rounded {{ $page == $paginator->currentPage() ? 'bg-primary text-white' : 'border-0 text-dark' }}" href="{{ $paginator->url($page) }}">
                     {{ $page }}
                 </a>
             </li>
         @endforeach
 
-        {{-- Next Page Link --}}
-        <li class="page-item {{ $currentPage >= $totalPages ? 'disabled' : '' }}">
-            <a class="page-link" href="{{ $isValidPage($currentPage + 1) ? $getPageUrl($currentPage + 1) : '#' }}"
-               tabindex="{{ $currentPage >= $totalPages ? '-1' : '0' }}" 
-               aria-disabled="{{ $currentPage >= $totalPages ? 'true' : 'false' }}">
-                <span aria-hidden="true">&raquo;</span>
+        <li class="page-item {{ $paginator->currentPage() >= $paginator->lastPage() ? 'disabled' : '' }}">
+            <a class="page-link border-0 bg-transparent" href="{{ $paginator->nextPageUrl() }}"
+               tabindex="{{ $paginator->currentPage() >= $paginator->lastPage() ? '-1' : '0' }}" 
+               aria-disabled="{{ $paginator->currentPage() >= $paginator->lastPage() ? 'true' : 'false' }}">
+                <i class="bi bi-chevron-right fs-4 text-primary"></i>
             </a>
         </li>
     </ul>

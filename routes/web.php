@@ -60,6 +60,7 @@ Route::get('/reset-password/{token}', function ($token) {
     return view('auth.reset-password', ['token' => $token]);
 })->middleware('guest')->name('password.reset');
 
+// Reset Password Route
 Route::post('/reset-password', function (Illuminate\Http\Request $request) {
     $request->validate([
         'token' => 'required',
@@ -129,7 +130,7 @@ Route::get('/test-db', function () {
 Route::get('/reviews/create/{product_id}', [ReviewController::class, 'create'])->name('reviews.create');
 Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 
-// Checkout process routes - 
+// Checkout routes
 Route::get('/CheckoutPage', [CheckoutController::class, 'index'])->name('checkout.legacy');
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
 Route::post('/checkout/complete', [CheckoutController::class, 'completeOrder'])->name('checkout.complete');

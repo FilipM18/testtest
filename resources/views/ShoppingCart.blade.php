@@ -44,8 +44,7 @@
         <h1 class="mb-4 fw-bold pb-4">Shopping Cart</h1>
 
         <div class="row g-5">
-            <!-- Cart Items -->
-                
+            <!-- Cart Items -->  
             <div class="row">
                 <div class="col-lg-8 mb-4 mb-lg-0">
                     @if(count($cart->items) > 0)
@@ -159,7 +158,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </main>
 

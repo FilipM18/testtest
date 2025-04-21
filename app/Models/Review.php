@@ -2,15 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Review extends Model
-{
-    use HasFactory;
-    
+{   
     protected $primaryKey = 'review_id';
-    
+    protected $table = 'reviews';
+    public $timestamps = true;
+
     protected $fillable = [
         'user_id',
         'product_id',

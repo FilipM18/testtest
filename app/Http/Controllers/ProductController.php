@@ -43,21 +43,21 @@ class ProductController extends Controller
         return redirect()->route('login')->with('error', 'You must be logged in to add to cart.');
     }
 
-    // Find or create the user's cart
+    // Nájdi alebo vytvor prázdny košík pre používateľa
     $cart = Cart::firstOrCreate(['user_id' => $user->id]);
 
-    // Check if this product/variant is already in the cart
+    // Skontroluj, či je produkt už existuje v košíku
     $cartItem = CartItem::where('cart_id', $cart->id)
         ->where('product_id', $request->product_id)
         ->where('variant_id', $request->variant_id)
         ->first();
 
     if ($cartItem) {
-        // Update quantity
+        // Zmeň množstvo 
         $cartItem->quantity += $request->quantity;
         $cartItem->save();
     } else {
-        // Add new item
+        // Vytvor nový záznam v košíku
         CartItem::create([
             'cart_id' => $cart->id,
             'product_id' => $request->product_id,

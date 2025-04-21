@@ -21,6 +21,7 @@
             <div class="col-lg-7">
                 <h2 class="visually-hidden">Images</h2>
                 <div class="row g-2">
+
                     <div class="col-12">
                         <img src="{{ asset($product->image_url) }}" class="img-fluid rounded" alt="{{ $product->name }}">
                     </div>
@@ -67,14 +68,14 @@
                                 @endif
                             @endfor
                         </div>
+                        
                         <div class="ms-3">·</div>
                         <div class="ms-3">
                             <a href="#reviews" class="text-decoration-none text-primary">See all {{ $reviewCount }} reviews</a>
                         </div>
                     </div>
                 </div>
-                
-                
+               
                 <p class="mt-3">{{ $product->description }}</p>
                 
                 <div class="mt-3">
@@ -128,8 +129,7 @@
                     @if(isset($variants) && count($variants) > 0)
                         <button type="submit" class="btn btn-primary w-100">Add to cart</button>
                     @endif
-                </form>
-                
+                </form>               
 
                 <div class="mt-3" id="reviews">
                     <h6>Customer Reviews</h6>
@@ -159,9 +159,7 @@
                     <div class="text-center mt-3">
                         <a href="{{ route('reviews.create', ['product_id' => $product->product_id]) }}" class="btn btn-outline-primary">Write a Review</a>
                     </div>                    
-                </div>
-
-                
+                </div>           
             </div>
         </div>
     </main>

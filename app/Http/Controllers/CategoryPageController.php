@@ -79,7 +79,6 @@ class CategoryPageController extends Controller
                 $query->orderBy('created_at', 'desc');
                 break;
             default:
-                // Default sorting, you can define what this should be
                 $query->orderBy('name', 'asc');
                 break;
         }
@@ -139,6 +138,7 @@ class CategoryPageController extends Controller
             })
             ->sortBy(function ($item) {
                 $sizeOrder = [
+                    'xs' => 0,
                     's' => 1,
                     'm' => 2,
                     'l' => 3,

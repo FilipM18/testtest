@@ -16,7 +16,7 @@ class CheckoutController extends Controller
     public function index()
     {
         if (Auth::check()) {
-            // Authenticated user - get cart from database
+            // Ak je overený používateľ, načítaj košík z databázy
             $user = Auth::user();
             $cart = Cart::where('user_id', $user->id)
                 ->with(['items.variant.product'])
@@ -26,7 +26,7 @@ class CheckoutController extends Controller
                 return redirect()->route('cart.index')->with('error', 'Your cart is empty');
             }
         } else {
-            // Guest user - get cart from session
+            // AK je hosť, načítaj košík zo session
             $sessionCart = session()->get('cart', []);
             
             if (empty($sessionCart)) {
@@ -68,7 +68,7 @@ class CheckoutController extends Controller
             'payment' => 'required|in:creditCard,paypal,transfer',
         ]);
         
-        // Get cart items (for authenticated or guest)
+        // Načítaj položky z košíka 
         if (Auth::check()) {
             $user = Auth::user();
             $cart = Cart::where('user_id', $user->id)
@@ -81,7 +81,6 @@ class CheckoutController extends Controller
             
             $items = $cart->items;
         } else {
-            // Guest user - get cart from session
             $sessionCart = session()->get('cart', []);
             
             if (empty($sessionCart)) {
@@ -99,43 +98,40 @@ class CheckoutController extends Controller
                 }
             }
         }
-        
-        // Begin transaction
+
         DB::beginTransaction();
-        
+
         try {
-            // 1. Save address (for both guests and users)
+            // 1. Ulož adresu
             $address = new Address();
             $address->country = $validated['country'];
             $address->city = $validated['city'];
             $address->street = $validated['address'];
             $address->zip_code = $validated['postal_code'];
             
-            // Set user_id if authenticated
+            // Ak je overený používateľ, nastav user_id čiže optional
             if (Auth::check()) {
                 $address->user_id = Auth::id();
             }
             
             $address->save();
             
-            // 2. Calculate totals
+            // 2. SPočítaj celkovú cenu
             $subtotal = $items->sum(function($item) {
                 return $item->variant->product->price * $item->quantity;
             });
             
             $shipping = $validated['delivery'] == 'standard' ? 5.00 : 16.00;
-            $taxes = $subtotal * 0.1; // 10% tax
+            $taxes = $subtotal * 0.1; 
             $total = $subtotal + $shipping + $taxes;
             
-            // 3. Create the order
+            // 3. Vytvori objednávku (order)
             $order = new Order();
             
-            // Set user_id if authenticated
             if (Auth::check()) {
                 $order->user_id = Auth::id();
             }
             
-            // Link to the address we just created
             $order->address_id = $address->address_id;
             $order->total_amount = $total;
             $order->status = 'pending';
@@ -143,7 +139,7 @@ class CheckoutController extends Controller
             $order->payment_status = 'pending';
             $order->save();
             
-            // 4. Create order items
+            // 4. Vytvor položky objednávky (orderitems)
             foreach ($items as $item) {
                 $orderItem = new OrderItem();
                 $orderItem->order_id = $order->order_id;
@@ -153,7 +149,7 @@ class CheckoutController extends Controller
                 $orderItem->save();
             }
             
-            // 5. Clear the cart
+            // 5. Vyprázdni košík
             if (Auth::check()) {
                 $cart->items()->delete();
             } else {
@@ -162,7 +158,7 @@ class CheckoutController extends Controller
             
             DB::commit();
             
-            // Return success message
+            // Ak úspech, presmeruj na stránku s potvrdením objednávky
             return redirect()->route('order.confirmation', ['order' => $order->order_id])->with('success', 'Order placed successfully!');
         } catch (\Exception $e) {
             DB::rollBack();
@@ -174,7 +170,6 @@ class CheckoutController extends Controller
     {
         $order = Order::with('orderItems.variant.product')->findOrFail($orderId);
         
-        // For guest orders, don't check user_id
         if (Auth::check() && $order->user_id != Auth::id()) {
             abort(403, 'Unauthorized action');
         }
