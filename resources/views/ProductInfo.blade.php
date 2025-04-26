@@ -7,6 +7,7 @@
     <title>{{ $product->name }} - Dressify</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightbox2@2.11.4/dist/css/lightbox.min.css">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 
@@ -23,15 +24,23 @@
                 <div class="row g-2">
 
                     <div class="col-12">
-                        <img src="{{ asset($product->image_url) }}" class="img-fluid rounded" alt="{{ $product->name }}">
+                        @if(is_array($product->image_url) && !empty($product->image_url))
+                            <a href="{{ asset($product->first_image) }}" data-lightbox="product-{{ $product->product_id }}">
+                                <img src="{{ asset($product->first_image) }}" class="img-fluid rounded" alt="{{ $product->name }}">
+                            </a>
+                        @else
+                            <a href="{{ asset($product->first_image) }}" data-lightbox="product-{{ $product->product_id }}">
+                                <img src="{{ asset($product->first_image) }}" class="img-fluid rounded" alt="{{ $product->name }}">
+                            </a>
+                        @endif
                     </div>
-                    @if(isset($product->additional_images) && count($product->additional_images) > 0)
-                        @foreach($product->additional_images as $index => $image)
-                            @if($index < 2)
-                                <div class="col-6">
+                    @if(is_array($product->image_url) && count($product->image_url) > 1)
+                        @foreach(array_slice($product->image_url, 1) as $index => $image)
+                            <div class="col-6">
+                                <a href="{{ asset($image) }}" data-lightbox="product-{{ $product->product_id }}">
                                     <img src="{{ asset($image) }}" class="img-fluid rounded" alt="{{ $product->name }} view {{ $index + 1 }}">
-                                </div>
-                            @endif
+                                </a>
+                            </div>
                         @endforeach
                     @endif
                 </div>
@@ -168,6 +177,8 @@
     @include('partials/footer')
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lightbox2@2.11.4/dist/js/lightbox.min.js"></script>
 </body>
 
 </html>

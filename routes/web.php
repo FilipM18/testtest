@@ -138,3 +138,14 @@ Route::get('/order/confirmation/{order}', [CheckoutController::class, 'showConfi
 
 
 
+// In routes/web.php
+Route::get('/test-image/{id}', function($id) {
+    $product = \App\Models\Product::find($id);
+    dd([
+        'raw_image_url' => $product->image_url,
+        'first_image' => $product->first_image,
+        'all_images' => $product->all_images,
+        'image_type' => gettype($product->image_url),
+        'image_exists' => file_exists(public_path($product->first_image))
+    ]);
+});

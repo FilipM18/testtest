@@ -32,7 +32,7 @@ class ProductController extends Controller
         $product->review_count = $reviewCount;
 
         $variants = ProductVariant::where('product_id', $id)->get();
-        
+
         return view('ProductInfo', compact('product', 'variants'));
     }
 
@@ -68,4 +68,82 @@ class ProductController extends Controller
 
     return redirect()->back()->with('success', 'Product added to cart!');
 }
+
+public function store(Request $request)
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'description' => 'required|string',
+        'price' => 'required|numeric',
+        'gender' => 'required|string',
+        'type' => 'required|string',
+        'brand_id' => 'required|exists:brands,brand_id',
+        'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
+    
+    // Initialize image paths array
+    $imagePaths = [];
+    
+    // Handle multiple image uploads
+    if ($request->hasFile('images')) {
+        foreach ($request->file('images') as $image) {
+            $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+            $path = $image->storeAs('products', $filename, 'public');
+            $imagePaths[] = $path; // Store only the path
+        }
+    }
+    \Log::info('Image paths being saved:', $imagePaths);
+
+    // Create product with image paths array
+    $product = Product::create([
+        'name' => $request->name,
+        'description' => $request->description,
+        'price' => $request->price,
+        'gender' => $request->gender,
+        'type' => $request->type,
+        'brand_id' => $request->brand_id,
+        'image_url' => $imagePaths,
+        'active' => true,
+    ]);
+    
+    return redirect()->route('products.index')->with('success', 'Product created successfully');
+}
+
+public function update(Request $request, $id)
+{
+    $product = Product::findOrFail($id);
+    
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'description' => 'required|string',
+        'price' => 'required|numeric',
+        'gender' => 'required|string',
+        'type' => 'required|string',
+        'brand_id' => 'required|exists:brands,brand_id',
+        'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
+    
+    $imagePaths = is_array($product->image_url) ? $product->image_url : [];
+    
+    // Handle image uploads
+    if ($request->hasFile('images')) {
+        foreach ($request->file('images') as $image) {
+            $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+            $path = $image->storeAs('products', $filename, 'public');
+            $imagePaths[] = $path;
+        }
+    }
+    
+    $product->update([
+        'name' => $request->name,
+        'description' => $request->description,
+        'price' => $request->price,
+        'gender' => $request->gender,
+        'type' => $request->type,
+        'brand_id' => $request->brand_id,
+        'image_url' => $imagePaths,
+    ]);
+    
+    return redirect()->route('products.index')->with('success', 'Product updated successfully');
+    }
 }

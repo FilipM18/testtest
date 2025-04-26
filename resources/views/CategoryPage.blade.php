@@ -74,7 +74,7 @@
                         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
                             @foreach($products as $product)
                                 <x-product-card 
-                                    :image="$product->image_url"
+                                    :image="$product->first_image"
                                     :title="$product->name"
                                     :description="Str::limit($product->description, 100)"
                                     :colors="$product->variants->unique('color')->count()"
