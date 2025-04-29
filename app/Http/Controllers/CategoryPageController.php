@@ -19,6 +19,8 @@ class CategoryPageController extends Controller
         $priceMax = $request->input('price_max');
         $sort = $request->input('sort');
         $search = $request->input('search');
+        $gender = $request->input('gender');
+
         
         if (!is_array($categories)) $categories = [$categories];
         if (!is_array($colors)) $colors = [$colors];
@@ -30,6 +32,19 @@ class CategoryPageController extends Controller
         
         $query = Product::query()->where('active', true);
         
+        if ($gender) {
+            if ($gender === 'kids') {
+                // Only show products where gender is exactly 'kids'
+                $query->where('gender', 'kids');
+            } else {
+                // Show products where gender matches or is unisex
+                $query->where(function ($q) use ($gender) {
+                    $q->where('gender', $gender)
+                      ->orWhere('gender', 'unisex');
+                });
+            }
+        }                    
+
         if ($search) {
             $query->where(function($q) use ($search) {
                 $q->where('name', 'ILIKE', "%{$search}%")

@@ -15,9 +15,9 @@
             <!-- Center: Navbar links, only on md+ -->
             <div class="collapse navbar-collapse d-none d-md-flex justify-content-center">
                 <ul class="navbar-nav gap-3">
-                    <li class="nav-item"><a class="nav-link" href="{{ url('../CategoryPage') }}">Women</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url('../CategoryPage') }}">Men</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url('../CategoryPage') }}">Kids</a></li>
+                    <a class="nav-link" href="{{ route('category.index', ['gender' => 'female']) }}">Women</a>
+                    <a class="nav-link" href="{{ route('category.index', ['gender' => 'male']) }}">Men</a>
+                    <a class="nav-link" href="{{ route('category.index', ['gender' => 'kids']) }}">Kids</a>
                 </ul>
             </div>
 
@@ -59,8 +59,8 @@
                             
                             @if(Auth::user()->role === 'admin')
                                 <!-- Admin-specific options -->
-                                <li><a class="dropdown-item" href="/AdminOrderManagement">Order Management</a></li>
-                                <li><a class="dropdown-item" href="/AdminProductManagement">Product Management</a></li>
+                                <li><a class="dropdown-item" href="{{ route('admin.orders') }}">Order Management</a></li>
+                                <li><a class="dropdown-item" href="{{ route('admin.products') }}">Product Management</a></li>
                                 <li><hr class="dropdown-divider"></li>
                             @endif
                             
@@ -99,9 +99,10 @@
         </div>
         <div class="offcanvas-body">
             <ul class="navbar-nav mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link" href="{{ url('../CategoryPage') }}">Women</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ url('../CategoryPage') }}">Men</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ url('../CategoryPage') }}">Kids</a></li>
+                <a class="nav-link" href="{{ route('category.index', ['gender' => 'female']) }}">Women</a>
+                <a class="nav-link" href="{{ route('category.index', ['gender' => 'male']) }}">Men</a>
+                <a class="nav-link" href="{{ route('category.index', ['gender' => 'kids']) }}">Kids</a>
+
             </ul>
             <hr>
             <div class="d-flex flex-column gap-2">
@@ -112,8 +113,8 @@
                     <span class="text-dark">Hello, {{ Auth::user()->name }}</span>
                     
                     @if(Auth::user()->role === 'admin')
-                        <a href="/AdminOrderManagement" class="text-decoration-none text-dark">Order Management</a>
-                        <a href="/AdminProductManagement" class="text-decoration-none text-dark">Product Management</a>
+                    <a href="{{ route('admin.orders') }}" class="text-decoration-none text-dark">Order Management</a>
+                    <a href="{{ route('admin.products') }}" class="text-decoration-none text-dark">Product Management</a>
                     @endif
                     
                     <form method="POST" action="{{ route('logout') }}">

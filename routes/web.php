@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -90,15 +91,23 @@ Route::post('/reset-password', function (Illuminate\Http\Request $request) {
 Route::get('/CategoryPage', [CategoryPageController::class, 'index'])->name('category.index');
 
 // Protected Routes (require authentication)
-Route::middleware('auth')->group(function () {
-    // Admin Routes
-    Route::get('/AdminOrderManagement', function () {
-        return view('AdminOrderManagement');
-    });
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('/products', [AdminController::class, 'products'])->name('products');
+    Route::get('/products/create', [AdminController::class, 'createProduct'])->name('products.create');
+    Route::post('/products', [AdminController::class, 'storeProduct'])->name('products.store');
+    Route::get('/products/{id}/edit', [AdminController::class, 'editProduct'])->name('products.edit');
+    Route::put('/products/{id}', [AdminController::class, 'updateProduct'])->name('products.update');
+    Route::delete('/products/{id}', [AdminController::class, 'deleteProduct'])->name('products.delete');
+    Route::get('products/{id}/data', [AdminController::class, 'getProductData'])->name('products.data');
+
+
+    Route::post('products/{productId}/images/{imageIndex}/ajax', [AdminController::class, 'deleteProductImageAjax'])
+    ->name('products.delete-image-ajax');
+
     
-    Route::get('/AdminProductManagement', function () {
-        return view('AdminProductManagement');
-    });
+    // Order Management
+    Route::get('/orders', [AdminController::class, 'orders'])->name('orders');
 });
 
 // Product routes
@@ -136,7 +145,7 @@ Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
 Route::post('/checkout/complete', [CheckoutController::class, 'completeOrder'])->name('checkout.complete');
 Route::get('/order/confirmation/{order}', [CheckoutController::class, 'showConfirmation'])->name('order.confirmation');
 
-
+Route::get('/test-admin', [AdminController::class, 'products']);
 
 // In routes/web.php
 Route::get('/test-image/{id}', function($id) {

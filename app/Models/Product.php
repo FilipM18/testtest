@@ -10,8 +10,9 @@ class Product extends Model
 {
     protected $table = 'products';
     protected $primaryKey = 'product_id';
-    public $timestamps = true;
-    
+    public $timestamps = false;
+    public $updated_at = null;
+
     protected $casts = [
         'image_url' => 'array',
         'active' => 'boolean'
@@ -54,14 +55,11 @@ class Product extends Model
         return $avgRating;
     }
     public function getFirstImageAttribute()
-{
-    if (empty($this->image_url)) {
-        return 'no-image.jpg';
+    {
+        if (empty($this->image_url)) {
+            return 'no-image.jpg';
+        }
+        $image = is_array($this->image_url) ? $this->image_url[0] : $this->image_url;
+        return $image;
     }
-    $image = is_array($this->image_url) ? $this->image_url[0] : $this->image_url;
-    return $image;
-}
-
-
-
 }
