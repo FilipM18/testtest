@@ -147,9 +147,9 @@
                                     <label class="form-label">Gender</label>
                                     <select class="form-select" name="gender" required>
                                         <option value="">Select Gender</option>
-                                        <option value="Men">Men</option>
-                                        <option value="Women">Women</option>
-                                        <option value="Unisex">Unisex</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                        <option value="unisex">Unisex</option>
                                     </select>
                                 </div>
                                 <div class="col-md-6">
@@ -214,9 +214,9 @@
                                     <label class="form-label">Gender</label>
                                     <select class="form-select" name="gender" id="editProductGender" required>
                                         <option value="">Select Gender</option>
-                                        <option value="Men">Men</option>
-                                        <option value="Women">Women</option>
-                                        <option value="Unisex">Unisex</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                        <option value="unisex">Unisex</option>
                                     </select>
                                 </div>
                                 <div class="col-md-6">

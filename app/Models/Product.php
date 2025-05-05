@@ -29,13 +29,13 @@ class Product extends Model
         'created_at',
         'active'
     ];
-    
+
     // Relationships
     public function variants()
     {
         return $this->hasMany(ProductVariant::class, 'product_id', 'product_id');
     }
-    
+
     public function brand()
     {
         return $this->belongsTo(Brand::class, 'brand_id', 'brand_id');
@@ -51,15 +51,32 @@ class Product extends Model
         //ešte pozri či nedať do controlleru
         $avgRating = $this->reviews()->avg('rating') ?: 0;
         $reviewCount = $this->reviews()->count();
-        
+
         return $avgRating;
     }
     public function getFirstImageAttribute()
     {
-        if (empty($this->image_url)) {
-            return 'no-image.jpg';
-        }
-        $image = is_array($this->image_url) ? $this->image_url[0] : $this->image_url;
-        return $image;
+    if (empty($this->image_url)) {
+        return 'no-image.jpg';
+    }
+
+    $images = is_array($this->image_url) 
+        ? $this->image_url 
+        : (is_string($this->image_url) ? json_decode($this->image_url, true) : []);
+
+    return is_array($images) && !empty($images) ? $images[0] : 'no-image.jpg';
+    }
+
+    public function getAllImagesAttribute()
+    {
+    if (empty($this->image_url)) {
+        return [];
+    }
+
+    if (is_string($this->image_url)) {
+        return json_decode($this->image_url, true) ?: [];
+    }
+
+    return is_array($this->image_url) ? $this->image_url : [];
     }
 }

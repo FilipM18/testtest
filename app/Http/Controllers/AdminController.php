@@ -53,10 +53,11 @@ class AdminController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'brand_id' => 'required|exists:brands,brand_id',
-            'gender' => 'required|string|in:Men,Women,Unisex',
+            'gender' => 'required|string|in:male,female,unisex',
             'type' => 'required|string',
             'price' => 'required|numeric|min:0',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'images' => 'required|array|min:2'
         ]);
         
         // Handle image uploads
@@ -103,7 +104,7 @@ class AdminController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'brand_id' => 'required|exists:brands,brand_id',
-            'gender' => 'required|string|in:Men,Women,Unisex',
+            'gender' => 'required|string|in:male,female,unisex',
             'type' => 'required|string',
             'price' => 'required|numeric|min:0',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
@@ -122,7 +123,7 @@ class AdminController extends Controller
                 $currentImages[] = 'images/products/' . $filename;
             }
             
-            $product->image_url = json_encode($currentImages);
+            $product->image_url = json_encode($currentImages, JSON_UNESCAPED_SLASHES);
         }
         
         // Update product

@@ -34,8 +34,11 @@
                             </a>
                         @endif
                     </div>
-                    @if(is_array($product->image_url) && count($product->image_url) > 1)
-                        @foreach(array_slice($product->image_url, 1) as $index => $image)
+                    @php
+                        $imageUrls = is_array($product->image_url) ? $product->image_url : (is_string($product->image_url) ? json_decode($product->image_url, true) : []);
+                    @endphp
+                    @if(is_array($imageUrls) && count($imageUrls) > 1)
+                        @foreach(array_slice($imageUrls, 1) as $index => $image)
                             <div class="col-6">
                                 <a href="{{ asset($image) }}" data-lightbox="product-{{ $product->product_id }}">
                                     <img src="{{ asset($image) }}" class="img-fluid rounded" alt="{{ $product->name }} view {{ $index + 1 }}">
