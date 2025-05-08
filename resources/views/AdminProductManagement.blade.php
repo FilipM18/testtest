@@ -153,10 +153,6 @@
                                     </select>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label">Color</label>
-                                    <input type="text" class="form-control" name="color" required>
-                                </div>
-                                <div class="col-md-6">
                                     <label class="form-label">Category</label>
                                     <input type="text" class="form-control" name="type" required>
                                 </div>
@@ -167,6 +163,46 @@
                                 <div class="col-12">
                                     <label class="form-label">Product Images</label>
                                     <input type="file" class="form-control" name="images[]" accept="image/*" multiple required>
+                                </div>
+                                
+                                <!-- Product Variants Section -->
+                                <div class="col-12 mt-4">
+                                    <h5>Product Variants</h5>
+                                    <p class="text-muted small">Add size and color variants for this product</p>
+                                    
+                                    <div id="variants-container">
+                                        <div class="variant-row row mb-3 align-items-center">
+                                            <div class="col-md-4">
+                                                <label class="form-label">Color</label>
+                                                <input type="text" class="form-control" name="variants[0][color]" required>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Size</label>
+                                                <select class="form-select" name="variants[0][size]" required>
+                                                    <option value="">Select Size</option>
+                                                    <option value="xs">XS</option>
+                                                    <option value="s">S</option>
+                                                    <option value="m">M</option>
+                                                    <option value="l">L</option>
+                                                    <option value="xl">XL</option>
+                                                    <option value="2xl">2XL</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Stock Quantity</label>
+                                                <input type="number" class="form-control" name="variants[0][stock]" min="0" value="10" required>
+                                            </div>
+                                            <div class="col-md-2 d-flex align-items-end">
+                                                <button type="button" class="btn btn-outline-danger remove-variant mt-4" style="display:none;">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <button type="button" class="btn btn-outline-secondary mt-2" id="add-variant">
+                                        <i class="bi bi-plus"></i> Add Another Variant
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -220,10 +256,6 @@
                                     </select>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label">Color</label>
-                                    <input type="text" class="form-control" name="color" id="editProductColor" required>
-                                </div>
-                                <div class="col-md-6">
                                     <label class="form-label">Category</label>
                                     <input type="text" class="form-control" name="type" id="editProductType" required>
                                 </div>
@@ -236,6 +268,18 @@
                                     <div id="editProductImages" class="mb-2"></div>
                                     <label class="form-label">Add/Replace Images</label>
                                     <input type="file" class="form-control" name="images[]" accept="image/*" multiple>
+                                </div>
+                                
+                                <div class="col-12 mt-4">
+                                    <h5>Product Variants</h5>
+                                    <p class="text-muted small">Edit existing variants or add new ones</p>
+                                    
+                                    <div id="edit-variants-container">
+                                    </div>
+                                    
+                                    <button type="button" class="btn btn-outline-secondary mt-2" id="edit-add-variant">
+                                        <i class="bi bi-plus"></i> Add Another Variant
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -284,21 +328,72 @@
         }
     });
 
-    // Edit Product Modal population
+    $('#add-variant').click(function() {
+        let variantIndex = $('.variant-row').length;
+        const newRow = `
+            <div class="variant-row row mb-3 align-items-center">
+                <div class="col-md-4">
+                    <label class="form-label">Color</label>
+                    <input type="text" class="form-control" name="variants[${variantIndex}][color]" required>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Size</label>
+                    <select class="form-select" name="variants[${variantIndex}][size]" required>
+                        <option value="">Select Size</option>
+                        <option value="xs">XS</option>
+                        <option value="s">S</option>
+                        <option value="m">M</option>
+                        <option value="l">L</option>
+                        <option value="xl">XL</option>
+                        <option value="2xl">2XL</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Stock Quantity</label>
+                    <input type="number" class="form-control" name="variants[${variantIndex}][stock]" min="0" value="10" required>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="button" class="btn btn-outline-danger remove-variant mt-4">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+        $('#variants-container').append(newRow);
+        
+        if ($('.variant-row').length > 1) {
+            $('.remove-variant').show();
+        }
+    });
+
+    $(document).on('click', '.remove-variant', function() {
+        $(this).closest('.variant-row').remove();
+        
+        if ($('.variant-row').length <= 1) {
+            $('.remove-variant').hide();
+        }
+    });
+
+
+    // Edit variant management
+    let editVariantIndex = 0;
+
     $('.btn-edit-product').on('click', function() {
         $('#editProductModal .modal-body').prepend('<div class="text-center py-4" id="editProductLoading">Loading...</div>');
         const productId = $(this).data('id');
+        
+        // Reset the variants container
+        $('#edit-variants-container').empty();
+        editVariantIndex = 0;
+        
         $.get(`/admin/products/${productId}/data`)
             .done(function(data) {
-                // Restore the modal body to the form if you overwrote it
-                // Populate form fields as needed
                 $('#editProductLoading').remove();
                 $('#editProductId').val(data.product_id);
                 $('#editProductName').val(data.name);
                 $('#editProductPrice').val(data.price);
                 $('#editProductBrand').val(data.brand_id);
                 $('#editProductGender').val(data.gender);
-                $('#editProductColor').val(data.color ?? '');
                 $('#editProductType').val(data.type);
                 $('#editProductDescription').val(data.description);
                 $('#editProductModalTitle').text('Edit Product: ' + data.name);
@@ -314,12 +409,96 @@
                     });
                 }
                 $('#editProductImages').html(imagesHtml);
+                
+                // Load variants
+                if (data.variants && data.variants.length > 0) {
+                    data.variants.forEach((variant, index) => {
+                        addEditVariantRow(variant, index);
+                    });
+                    
+                    // Show remove buttons if more than one variant
+                    if (data.variants.length > 1) {
+                        $('.edit-remove-variant').show();
+                    } else {
+                        $('.edit-remove-variant').hide();
+                    }
+                } else {
+                    // Add one empty variant row if none exist
+                    addEditVariantRow();
+                }
+                
                 $('#editProductForm').attr('action', `/admin/products/${productId}`);
             })
             .fail(function() {
                 $('#editProductLoading').remove();
                 $('#editProductModal .modal-body').html('<div class="alert alert-danger">Failed to load product data.</div>');
             });
+    });
+
+    // Add variant row for edit form
+    function addEditVariantRow(variant = null, index = null) {
+        if (index === null) {
+            index = editVariantIndex++;
+        } else {
+            editVariantIndex = Math.max(editVariantIndex, index + 1);
+        }
+        
+        const variantId = variant ? variant.variant_id : '';
+        const color = variant ? variant.color : '';
+        const size = variant ? variant.size : '';
+        const stock = variant ? variant.stock_quantity : 10;
+        
+        const newRow = `
+            <div class="variant-row row mb-3 align-items-center">
+                <input type="hidden" name="edit_variants[${index}][variant_id]" value="${variantId}">
+                <div class="col-md-4">
+                    <label class="form-label">Color</label>
+                    <input type="text" class="form-control" name="edit_variants[${index}][color]" value="${color}" required>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Size</label>
+                    <select class="form-select" name="edit_variants[${index}][size]" required>
+                        <option value="">Select Size</option>
+                        <option value="xs" ${size === 'xs' ? 'selected' : ''}>XS</option>
+                        <option value="s" ${size === 's' ? 'selected' : ''}>S</option>
+                        <option value="m" ${size === 'm' ? 'selected' : ''}>M</option>
+                        <option value="l" ${size === 'l' ? 'selected' : ''}>L</option>
+                        <option value="xl" ${size === 'xl' ? 'selected' : ''}>XL</option>
+                        <option value="2xl" ${size === '2xl' ? 'selected' : ''}>2XL</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Stock Quantity</label>
+                    <input type="number" class="form-control" name="edit_variants[${index}][stock]" min="0" value="${stock}" required>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="button" class="btn btn-outline-danger edit-remove-variant mt-4" ${$('.variant-row').length <= 0 ? 'style="display:none;"' : ''}>
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+        $('#edit-variants-container').append(newRow);
+    }
+
+    // Add new variant row in edit form
+    $(document).on('click', '#edit-add-variant', function() {
+        addEditVariantRow();
+        
+        // Show all remove buttons when we have more than one variant
+        if ($('#edit-variants-container .variant-row').length > 1) {
+            $('.edit-remove-variant').show();
+        }
+    });
+
+    // Remove variant row in edit form
+    $(document).on('click', '.edit-remove-variant', function() {
+        $(this).closest('.variant-row').remove();
+        
+        // Hide remove buttons if only one variant remains
+        if ($('#edit-variants-container .variant-row').length <= 1) {
+            $('.edit-remove-variant').hide();
+        }
     });
 
     // Delete image from product (AJAX)

@@ -42,11 +42,11 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Password Reset Routes
 Route::get('/forgot-password', function () {
-    return view('auth.forgot-password');
+    abort();
 })->middleware('guest')->name('password.request');
 
 Route::post('/forgot-password', function (Illuminate\Http\Request $request) {
-    $request->validate(['email' => 'required|email']);
+    abort(404);
 
     $status = Password::sendResetLink(
         $request->only('email')
@@ -58,7 +58,7 @@ Route::post('/forgot-password', function (Illuminate\Http\Request $request) {
 })->middleware('guest')->name('password.email');
 
 Route::get('/reset-password/{token}', function ($token) {
-    return view('auth.reset-password', ['token' => $token]);
+    abort(404);
 })->middleware('guest')->name('password.reset');
 
 // Reset Password Route

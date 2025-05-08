@@ -56,11 +56,22 @@ class AdminController extends Controller
             'gender' => 'required|string|in:male,female,unisex',
             'type' => 'required|string',
             'price' => 'required|numeric|min:0',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-            'images' => 'required|array|min:2'
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp,avif|max:2048',
+            'images' => 'required|array|min:1'
         ]);
         
-        // Handle image uploads
+        $variants = $request->input('variants', $request->input('edit_variants', []));
+
+        if (empty($variants)) {
+            return redirect()->back()->withInput()->withErrors(['variants' => 'At least one product variant is required']);
+        }
+        
+        foreach ($variants as $variantData) {
+            if (!isset($variantData['color']) || !isset($variantData['size']) || !isset($variantData['stock'])) {
+                return redirect()->back()->withInput()->withErrors(['variants' => 'Each variant must have color, size, and stock quantity']);
+            }
+        }
+        
         $imagePaths = [];
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
@@ -82,17 +93,20 @@ class AdminController extends Controller
         $product->active = true;
         $product->save();
         
-        return redirect()->route('admin.products')->with('success', 'Product created successfully');
-    }
-    
-    // Edit Product Form
-    public function editProduct($id)
-    {
-        $product = Product::findOrFail($id);
-        $brands = Brand::all();
-        $colors = ['Red', 'Blue', 'Green', 'Black', 'White', 'Yellow', 'Purple', 'Orange', 'Gray'];
+        foreach ($variants as $variantData) {
+            $variant = new \App\Models\ProductVariant();
+            $variant->product_id = $product->product_id;
+            $variant->size = $variantData['size'];
+            $variant->color = $variantData['color'];
+            $variant->stock_quantity = $variantData['stock'];
+            $variant->sku = strtoupper(substr($product->name, 0, 3)) . '-' . 
+                            strtoupper($variantData['color']) . '-' . 
+                            strtoupper($variantData['size']) . '-' . 
+                            $product->product_id;
+            $variant->save();
+        }
         
-        return view('admin.edit-product', compact('product', 'brands', 'colors'));
+        return redirect()->route('admin.products')->with('success', 'Product created successfully');
     }
     
     // Update Product
@@ -107,7 +121,8 @@ class AdminController extends Controller
             'gender' => 'required|string|in:male,female,unisex',
             'type' => 'required|string',
             'price' => 'required|numeric|min:0',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'edit_variants' => 'required|array|min:1',
         ]);
         
         // Handle image uploads
@@ -135,6 +150,43 @@ class AdminController extends Controller
         $product->price = $validated['price'];
         $product->updated_at = null;
         $product->save();
+        
+        $existingVariantIds = $product->variants->pluck('variant_id')->toArray();
+        $updatedVariantIds = [];
+        
+        foreach ($request->edit_variants as $variantData) {
+            if (!empty($variantData['variant_id'])) {
+                $variant = \App\Models\ProductVariant::find($variantData['variant_id']);
+                if ($variant) {
+                    $variant->color = $variantData['color'];
+                    $variant->size = $variantData['size'];
+                    $variant->stock_quantity = $variantData['stock'];
+                    $variant->sku = strtoupper(substr($product->name, 0, 3)) . '-' . 
+                                    strtoupper($variantData['color']) . '-' . 
+                                    strtoupper($variantData['size']) . '-' . 
+                                    $product->product_id;
+                    $variant->save();
+                    $updatedVariantIds[] = $variant->variant_id;
+                }
+            } else {
+                $variant = new \App\Models\ProductVariant();
+                $variant->product_id = $product->product_id;
+                $variant->color = $variantData['color'];
+                $variant->size = $variantData['size'];
+                $variant->stock_quantity = $variantData['stock'];
+                $variant->sku = strtoupper(substr($product->name, 0, 3)) . '-' . 
+                                strtoupper($variantData['color']) . '-' . 
+                                strtoupper($variantData['size']) . '-' . 
+                                $product->product_id;
+                $variant->save();
+                $updatedVariantIds[] = $variant->variant_id;
+            }
+        }
+        
+        $variantsToDelete = array_diff($existingVariantIds, $updatedVariantIds);
+        if (!empty($variantsToDelete)) {
+            \App\Models\ProductVariant::whereIn('variant_id', $variantsToDelete)->delete();
+        }
         
         return redirect()->route('admin.products')->with('success', 'Product updated successfully');
     }
@@ -242,29 +294,37 @@ class AdminController extends Controller
         return response()->json(['success' => false, 'message' => 'Image not found']);
     }
     
-    // Get Product Data for Modal
     public function getProductData($id)
     {
-        $product = \App\Models\Product::with('brand')->findOrFail($id);
-    
-        // Format images as an array
+        $product = \App\Models\Product::with(['brand', 'variants'])->findOrFail($id);
+
         $images = [];
         if (is_array($product->image_url)) {
             $images = $product->image_url;
         } elseif (is_string($product->image_url)) {
             $images = json_decode($product->image_url, true) ?? [];
         }
-    
+
+        $variants = $product->variants->map(function($variant) {
+            return [
+                'variant_id' => $variant->variant_id,
+                'color' => $variant->color,
+                'size' => $variant->size,
+                'stock_quantity' => $variant->stock_quantity,
+                'sku' => $variant->sku
+            ];
+        });
+
         return response()->json([
             'product_id' => $product->product_id,
             'name' => $product->name,
             'price' => $product->price,
             'brand_id' => $product->brand_id,
             'gender' => $product->gender,
-            'color' => $product->color,
             'type' => $product->type,
             'description' => $product->description,
             'images' => $images,
+            'variants' => $variants
         ]);
     }
     
