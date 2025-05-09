@@ -200,7 +200,7 @@
                       <div class="card-img-container me-3">
 
                         @if($item->variant->product->image_url)
-                          <img src="{{ asset($item->variant->product->image_url) }}" alt="{{ $item->variant->product->name }}">
+                        <img src="{{ asset($item->variant->product->image_url[0]) }}" alt="{{ $item->variant->product->name }}">
                         @else
                           <div class="bg-light" style="width: 80px; height: 80px;"></div>
                         @endif

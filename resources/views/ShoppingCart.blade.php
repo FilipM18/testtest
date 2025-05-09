@@ -68,7 +68,7 @@
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     @if($item->variant->product->image_url)
-                                                        <img src="{{ asset($item->variant->product->image_url) }}" class="product-image me-3" alt="{{ $item->variant->product->name }}">
+                                                        <img src="{{ asset($item->variant->product->first_image) }}" class="product-image me-3" alt="{{ $item->variant->product->name }}">
                                                     @else
                                                         <div class="bg-light me-3" style="width: 80px; height: 80px;"></div>
                                                     @endif

@@ -8,7 +8,7 @@ class Order extends Model
 {
     protected $primaryKey = 'order_id';
     protected $table = 'orders';
-    public $timestamps = true;
+    public $timestamps = false;
     
     protected $dates = [
         'created_at'

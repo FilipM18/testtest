@@ -53,7 +53,7 @@
                                                 Guest
                                             @endif
                                         </td>
-                                        <td>{{ $order->created_at->format('Y-m-d') }}</td>
+                                        <td>{{ $order->created_at ? date('Y-m-d', strtotime($order->created_at)) : 'N/A' }}</td>
                                         <td>${{ number_format($order->total_amount, 2) }}</td>
                                         <td>
                                             <span class="badge 

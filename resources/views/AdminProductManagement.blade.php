@@ -340,12 +340,12 @@
                     <label class="form-label">Size</label>
                     <select class="form-select" name="variants[${variantIndex}][size]" required>
                         <option value="">Select Size</option>
-                        <option value="xs">XS</option>
-                        <option value="s">S</option>
-                        <option value="m">M</option>
-                        <option value="l">L</option>
-                        <option value="xl">XL</option>
-                        <option value="2xl">2XL</option>
+                        <option value="XS">XS</option>
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                        <option value="XL">XL</option>
+                        <option value="2XL">2XL</option>
                     </select>
                 </div>
                 <div class="col-md-3">
@@ -459,12 +459,12 @@
                     <label class="form-label">Size</label>
                     <select class="form-select" name="edit_variants[${index}][size]" required>
                         <option value="">Select Size</option>
-                        <option value="xs" ${size === 'xs' ? 'selected' : ''}>XS</option>
-                        <option value="s" ${size === 's' ? 'selected' : ''}>S</option>
-                        <option value="m" ${size === 'm' ? 'selected' : ''}>M</option>
-                        <option value="l" ${size === 'l' ? 'selected' : ''}>L</option>
-                        <option value="xl" ${size === 'xl' ? 'selected' : ''}>XL</option>
-                        <option value="2xl" ${size === '2xl' ? 'selected' : ''}>2XL</option>
+                        <option value="XS" ${size === 'xs' ? 'selected' : ''}>XS</option>
+                        <option value="S" ${size === 's' ? 'selected' : ''}>S</option>
+                        <option value="M" ${size === 'm' ? 'selected' : ''}>M</option>
+                        <option value="L" ${size === 'l' ? 'selected' : ''}>L</option>
+                        <option value="XL" ${size === 'xl' ? 'selected' : ''}>XL</option>
+                        <option value="2XL" ${size === '2xl' ? 'selected' : ''}>2XL</option>
                     </select>
                 </div>
                 <div class="col-md-3">

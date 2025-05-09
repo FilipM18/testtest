@@ -16,7 +16,12 @@ class CartController extends Controller
             // Autentifikacia 
             $cart = Cart::where('user_id', Auth::id())->first();
             $cartItems = $cart ? CartItem::where('cart_id', $cart->cart_id)->get() : collect();
-            $cart->load('items.variant.product');
+            
+            if ($cart) {
+                $cart->load('items.variant.product');
+            } else {
+                $cart = (object)['items' => collect()];
+            }
         } else {
             // Guest- session
             $sessionCart = session()->get('cart', []);
@@ -38,7 +43,6 @@ class CartController extends Controller
         
         return view('ShoppingCart', compact('cart', 'cartItems'));
     }
-
     public function add(Request $request)
     {
         $variantId = $request->variant_id;
